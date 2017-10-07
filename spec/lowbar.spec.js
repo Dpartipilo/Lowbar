@@ -182,7 +182,7 @@ describe('#uniq', () => {
 
 /** **********************************************/
 
-describe.only('#map', () => {
+describe('#map', () => {
   it('is a function', () => {
     expect(_.map).to.be.a('function');
   });
@@ -201,6 +201,32 @@ describe.only('#map', () => {
     expect(_.map({ one: 1, two: 2, three: 3 }, (num) => num * 3)).to.eql([3, 6, 9]);
   });
 
+});
+
+/** **********************************************/
+
+describe.only('#contains', function () {
+  it('is a function', function () {
+    expect(_.contains).to.be.a('function');
+  });
+  it('returns false if the value is not present', function () {
+    expect(_.contains('Hello', 'd')).to.equal(false);
+    expect(_.contains({ name: 'moe', age: 40 }, 'maria')).to.equal(false);
+    expect(_.contains([1, '2', 3, 4], 5)).to.equal(false);
+  });
+  it('returns true if the value is present in a string', function () {
+    expect(_.contains('Hello', 'e')).to.equal(true);
+    expect(_.contains('Hello', 'o')).to.equal(true);
+    expect(_.contains('Hello World', 'W')).to.equal(true);
+  });
+  it('returns true if the value is present in an object', function () {
+    expect(_.contains({ name: 'moe', age: 40 }, 'moe')).to.equal(true);
+    expect(_.contains({ name: 'moe', age: 40 }, 40)).to.equal(true);
+  });
+  it('returns true if the value is present in an array', function () {
+    expect(_.contains([1, 2, 3, 4], 3)).to.equal(true);
+    expect(_.contains([1, '2', 3, 4], '2')).to.equal(true);
+  });
 });
 
 /** **********************************************/

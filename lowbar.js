@@ -107,7 +107,6 @@ _.map = function (array, iteratee) {
         newArray.push(iteratee(element));
       }
     });
-
   }
 
   // for objects
@@ -119,5 +118,25 @@ _.map = function (array, iteratee) {
   return newArray;
 };
 
+_.contains = function (input, value) {
+  if (!Array.isArray(input)) {
+    for (let i = 0; i < input.length; i++) {
+      if (input[i] === value) return true;
+    }
+  }
+  if (Array.isArray(input)) {
+    for (let i = 0; i < input.length; i++) {
+      if (input[i] === value) {
+        return true;
+      }
+    }
+  }
+  if (typeof input === 'object' && !Array.isArray(input)) {
+    for (var key in input) {
+      if (input[key] === value) return true;
+    }
+  }
+  return false;
+};
 
 module.exports = _;
