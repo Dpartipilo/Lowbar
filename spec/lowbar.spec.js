@@ -4,17 +4,17 @@ const sinon = require('sinon');
 const _ = require(path.join(__dirname, '..', './lowbar.js'));
 
 /** ***********************************************/
-describe('_', function () {
+describe('_', () => {
   'use strict';
 
-  it('is an object', function () {
+  it('is an object', () => {
     expect(_).to.be.an('object');
   });
-  describe('#identity', function () {
-    it('is a function', function () {
+  describe('#identity', () => {
+    it('is a function', () => {
       expect(_.identity).to.be.a('function');
     });
-    it('returns the same output as the argument', function () {
+    it('returns the same output as the argument', () => {
       expect(_.identity('hello')).to.equal('hello');
       expect(_.identity(123)).to.equal(123);
       expect(_.identity([1, 2, '3', 4, 5])).to.eql([1, 2, '3', 4, 5]);
@@ -26,21 +26,21 @@ describe('_', function () {
 
 /** **********************************************/
 
-describe('#first', function () {
-  it('is a function', function () {
+describe('#first', () => {
+  it('is a function', () => {
     expect(_.first).to.be.a('function');
   });
-  it('returns an empty array for invalid input', function () {
+  it('returns an empty array for invalid input', () => {
     expect(_.first()).to.eql([]);
     expect(_.first(5)).to.eql([]);
     expect(_.first('string')).to.eql([]);
     expect(_.first({})).to.eql([]);
   });
-  it('returns the first index of the array', function () {
+  it('returns the first index of the array', () => {
     expect(_.first([1, 2, 3])).to.eql(1);
     expect(_.first(['A', 'B', 'C'])).to.eql('A');
   });
-  it('returns the first n elements of the array when a 2nd argument is given.', function () {
+  it('returns the first n elements of the array when a 2nd argument is given.', () => {
     expect(_.first.length).to.equal(2);
     expect(_.first([1, 2, 3, 4], 2)).to.eql([1, 2]);
     expect(_.first([1, 2, '3', '4', 5, 6, 7], 4)).to.eql([1, 2, '3', '4']);
@@ -50,18 +50,18 @@ describe('#first', function () {
 
 /** **********************************************/
 
-describe('#last', function () {
-  it('is a function', function () {
+describe('#last', () => {
+  it('is a function', () => {
     expect(_.last).to.be.a('function');
   });
-  it('returns an empty array for invalid input', function () {
+  it('returns an empty array for invalid input', () => {
     expect(_.last()).to.eql([]);
   });
-  it('returns the last index of the array', function () {
+  it('returns the last index of the array', () => {
     expect(_.last([1, 2, 3])).to.eql(3);
     expect(_.last(['A', 'B', 'C'])).to.eql('C');
   });
-  it('returns the last n elements of the array when a 2nd argument is given.', function () {
+  it('returns the last n elements of the array when a 2nd argument is given.', () => {
     expect(_.last.length).to.equal(2);
     expect(_.last([1, 2, 3, 4], 2)).to.eql([3, 4]);
     expect(_.last([1, 2, '3', '4', 5, 6, 7], 4)).to.eql(['4', 5, 6, 7]);
@@ -71,28 +71,28 @@ describe('#last', function () {
 
 /** **********************************************/
 
-describe('#each', function () {
-  it('is a function', function () {
+describe('#each', () => {
+  it('is a function', () => {
     expect(_.each).to.be.a('function');
   });
-  it('it should count the number of iterations in the function', function () {
+  it('it should count the number of iterations in the function', () => {
     const spy = sinon.spy();
     _.each([1, 2, 3], spy);
     expect(spy.callCount).to.equal(3);
   });
-  it('calls the iteratee passing each element of the array as the first argument', function () {
+  it('calls the iteratee passing each element of the array as the first argument', () => {
     const spy = sinon.spy();
     _.each([1, 2, 3], spy);
     expect(spy.firstCall.calledWithExactly(1, 0, [1, 2, 3])).to.equal(true);
     expect(spy.secondCall.calledWithExactly(2, 1, [1, 2, 3])).to.equal(true);
     expect(spy.thirdCall.calledWithExactly(3, 2, [1, 2, 3])).to.equal(true);
   });
-  it('works for objects', function () {
+  it('works for objects', () => {
     const spy = sinon.spy();
     _.each({ one: 1, two: 2, three: 3 }, spy);
     expect(spy.callCount).to.equal(3);
   });
-  it('calls the iteratee passing each element of the object as the first argument', function () {
+  it('calls the iteratee passing each element of the object as the first argument', () => {
     const spy = sinon.spy();
     _.each({ one: 1, two: 2, three: 3 }, spy);
     expect(spy.firstCall.calledWithExactly(1, 'one', { one: 1, two: 2, three: 3 })).to.equal(true);
@@ -103,27 +103,46 @@ describe('#each', function () {
 
 /** **********************************************/
 
-describe('#indexOf', function () {
-  it('is a function', function () {
+describe('#indexOf', () => {
+  it('is a function', () => {
     expect(_.indexOf).to.be.a('function');
   });
 
-  it('the function takes 3 arguments 3rd boolean [optional]', function () {
+  it('the function takes 3 arguments 3rd boolean [optional]', () => {
     expect(_.indexOf.length).to.equal(3);
   });
 
-  it('return the index of the value in the array', function () {
+  it('return the index of the value in the array', () => {
     expect(_.indexOf([1, 2, 3, 'a'], 3)).to.eql(2);
     expect(_.indexOf([1, 2, 3, 'a'], 'a')).to.eql(3);
   });
 
-  it('return -1 if value is not present in the array', function () {
+  it('return -1 if value is not present in the array', () => {
     expect(_.indexOf([1, 2, 3, 'a'], 4)).to.eql(-1);
   });
 
-  it('if the array is sorted apply binary search', function () {
+  it('if the array is sorted apply binary search', () => {
     expect(_.indexOf([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 9, true)).to.eql(8);
   });
 });
+
+/** **********************************************/
+
+describe('#filter', () => {
+  it('is a function', () => {
+    expect(_.filter).to.be.a('function');
+  });
+  it('returns an empty array for invalid arguments', () => {
+    expect(_.filter('test')).to.eql([]);
+    expect(_.filter({})).to.eql([]);
+    expect(_.filter(4)).to.eql([]);
+  });
+  it('returns an array of all the values that pass a truth test', () => {
+    expect(_.filter([1, 2, 3, 4], (elem) => elem % 2 === 0)).to.eql([2, 4]);
+    expect(_.filter([1, 'a', 3, 'b'], (elem) => typeof elem === 'string')).to.eql(['a', 'b']);
+    expect(_.filter([1, 'a', 3, 'b'], (elem) => typeof elem === 'number')).to.eql([1, 3]);
+  });
+});
+
 
 /** **********************************************/
