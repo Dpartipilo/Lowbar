@@ -205,7 +205,7 @@ describe('#map', () => {
 
 /** **********************************************/
 
-describe.only('#contains', function () {
+describe('#contains', function () {
   it('is a function', function () {
     expect(_.contains).to.be.a('function');
   });
@@ -228,6 +228,26 @@ describe.only('#contains', function () {
   it('returns true if the value is present in an array', function () {
     expect(_.contains([1, 2, 3, 4], 3)).to.equal(true);
     expect(_.contains([1, '2', 3, 4], '2')).to.equal(true);
+  });
+});
+
+/** **********************************************/
+
+describe('#pluck', function () {
+  it('is a function', function () {
+    expect(_.pluck).to.be.a('function');
+  });
+  it('should return an empty array for invalid arguments', function () {
+    expect(_.pluck('str')).to.eql([]);
+    expect(_.pluck(5)).to.eql([]);
+    expect(_.pluck(undefined)).to.eql([]);
+    expect(_.pluck({})).to.eql([]);
+  });
+  it('return a array of property values', function () {
+    expect(_.pluck([{ name: 'moe', age: 40 }], 'age')).to.eql([40]);
+    expect(_.pluck([{ name: 'moe', age: 40 }], 'name')).to.eql(['moe']);
+    expect(_.pluck([{ name: 'moe', age: 40 }, { name: 'mia', age: 35 },
+    { name: 'jack', age: 25 }], 'name')).to.eql(['moe', 'mia', 'jack']);
   });
 });
 

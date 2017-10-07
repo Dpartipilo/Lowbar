@@ -140,4 +140,16 @@ _.contains = function (input, value) {
   return false;
 };
 
+
+_.pluck = function (list, propertyName) {
+  if (!Array.isArray(list)) return [];
+  var newArr = [];
+  for (var i = 0; i < list.length; i++) {
+    for (var key in list[i]) {
+      if (propertyName === key) { newArr.push(list[i][propertyName]); }
+    }
+  }
+  return newArr;
+};
+
 module.exports = _;
