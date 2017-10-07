@@ -147,35 +147,26 @@ _.pluck = function (list, propertyName) {
 
   _.map(list, (element) => {
     for (var key in element) {
-      if (propertyName === key)  newArr.push(element[propertyName]); 
+      if (propertyName === key) newArr.push(element[propertyName]);
     }
   });
 
   //* **************WITHOUT MAP****************
   // for (var i = 0; i < list.length; i++) {
-    // for (var key in list[i]) {
-    //   if (propertyName === key) { newArr.push(list[i][propertyName]); }
-    // }
+  // for (var key in list[i]) {
+  //   if (propertyName === key) { newArr.push(list[i][propertyName]); }
+  // }
   // }
   return newArr;
 };
 
-// _.reduce = function (list, fn, acc) {
-//   if (!Array.isArray(list)) return [];
-//   acc = 0;
-// for (let i = 0; i < list.length; i++) {
-//   acc += list[i];
-// }
-// return acc;
-// };
-
 _.reduce = function (list, iteratee, memo) {
   if (!Array.isArray(list)) return [];
-  if (Array.isArray(list)) {
-    for (let i = 0; i < list.length; i++) {
-      memo = iteratee(memo, list[i], i, list);
-    }
+
+  for (let i = 0; i < list.length; i++) {
+    memo = iteratee(memo, list[i], i, list);
   }
+
   return memo;
 };
 
