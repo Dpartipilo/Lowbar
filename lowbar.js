@@ -29,4 +29,22 @@ _.each = function (list, iteratee) {
   }
 };
 
+_.indexOf = function (array, value, isSorted) {
+  
+  if (isSorted) {
+    let low = 1, high = array.length;
+    while (low <= high) {
+      let mid = low + (high - low) / 2;
+      if (array[mid] === value) return mid;
+      else if (array[mid] < value) low = mid + 1;
+      else high = mid - 1;
+    }
+  }
+
+  for (var i = 0; i < array.length; i++) {
+    if (array[i] === value) return i;
+  }
+  return -1;
+};
+
 module.exports = _;

@@ -102,3 +102,28 @@ describe('#each', function () {
 });
 
 /** **********************************************/
+
+describe.only('#indexOf', function () {
+  it('is a function', function () {
+    expect(_.indexOf).to.be.a('function');
+  });
+
+  it('is a function', function () {
+    expect(_.indexOf.length).to.equal(3);
+  });
+
+  it('return the index of the value in the array', function () {
+    expect(_.indexOf([1, 2, 3, 'a'], 3)).to.eql(2);
+    expect(_.indexOf([1, 2, 3, 'a'], 'a')).to.eql(3);
+  });
+
+  it('return -1 if value is not present in the array', function () {
+    expect(_.indexOf([1, 2, 3, 'a'], 4)).to.eql(-1);
+  });
+
+  it('if the array is sorted apply binary search', function () {
+    expect(_.indexOf([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 9, true)).to.eql(8);
+  });
+});
+
+/** **********************************************/
