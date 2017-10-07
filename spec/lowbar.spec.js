@@ -163,3 +163,26 @@ describe('#reject', () => {
 });
 
 /** **********************************************/
+
+describe('#uniq', function () {
+  it('is a function', function () {
+    expect(_.uniq).to.be.a('function');
+  });
+  it('returns an empty array for invalid arguments', function () {
+    expect(_.uniq('test')).to.eql([]);
+    expect(_.uniq({})).to.eql([]);
+    expect(_.uniq(4)).to.eql([]);
+  });
+  it('returns an array with only 1st occurence of each value', function () {
+    expect(_.uniq([1, 2, 2, 3, 3, 1, 4])).to.eql([1, 2, 3, 4]);
+    expect(_.uniq([1, 2, '2', 3, 3, '2', 1, 4])).to.eql([1, 2, '2', 3, 4]);
+    expect(_.uniq([1, 2, [2, 3], 3, 1, 4])).to.eql([1, 2, [2, 3], 3, 4]);
+  });
+
+  it('if the array is sorted runs a faster algorithm', function () {
+    expect(_.uniq([1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 6, 6, 7, 7, 7, 8, 8, 8, 8])).to.eql([1, 2, 3, 4, 5, 6, 7, 8]);
+
+  });
+});
+
+/** **********************************************/

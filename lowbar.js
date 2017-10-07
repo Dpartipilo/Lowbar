@@ -68,4 +68,24 @@ _.reject = function (list, predicate) {
   return result;
 };
 
+_.uniq = function (array, isSorted) {
+  if (!Array.isArray(array)) return [];
+
+  let uniqueArray = [];
+
+  _.each(array, (element) => {
+    if (!uniqueArray.includes(element)) {
+      uniqueArray.push(element);
+    }
+  });
+
+  // ***********WITHOUT _.each*************
+  // for (var i = 0; i < array.length; i++) {
+  //   if (!uniqueArray.includes(array[i]))
+  //     uniqueArray.push(array[i]);
+  // }
+  return uniqueArray;
+};
+
+
 module.exports = _;
