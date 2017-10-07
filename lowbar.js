@@ -51,12 +51,21 @@ _.indexOf = function (array, value, isSorted) {
 _.filter = function (list, predicate) {
   if (!Array.isArray(list)) return [];
   let result = [];
-  
+
   for (var i = 0; i < list.length; i++) {
     if (predicate(list[i])) result.push(list[i]);
   }
   return result;
 };
 
+_.reject = function (list, predicate) {
+  if (!Array.isArray(list)) return [];
+  let result = [];
+
+  for (var i = 0; i < list.length; i++) {
+    if (!predicate(list[i])) result.push(list[i]);
+  }
+  return result;
+};
 
 module.exports = _;

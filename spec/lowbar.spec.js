@@ -144,5 +144,22 @@ describe('#filter', () => {
   });
 });
 
+/** **********************************************/
+
+describe('#reject', () => {
+  it('is a function', () => {
+    expect(_.reject).to.be.a('function');
+  });
+  it('returns an empty array for invalid arguments', () => {
+    expect(_.reject('test')).to.eql([]);
+    expect(_.reject({})).to.eql([]);
+    expect(_.reject(4)).to.eql([]);
+  });
+  it('returns an array of all the values that does not pass a truth test', () => {
+    expect(_.reject([1, 2, 3, 4], (num) => num % 2 === 0)).to.eql([1, 3]);
+    expect(_.reject([1, 'a', 3, 'b'], (elem) => typeof elem === 'number')).to.eql(['a', 'b']);
+    expect(_.reject([1, 'a', 3, 'b'], (elem) => typeof elem === 'string')).to.eql([1, 3]);
+  });
+});
 
 /** **********************************************/
