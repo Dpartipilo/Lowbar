@@ -205,27 +205,27 @@ describe('#map', () => {
 
 /** **********************************************/
 
-describe('#contains', function () {
-  it('is a function', function () {
+describe('#contains', () => {
+  it('is a function', () => {
     expect(_.contains).to.be.a('function');
   });
-  it('returns false if the value is not present', function () {
+  it('returns false if the value is not present', () => {
     expect(_.contains('Hello', 'd')).to.equal(false);
     expect(_.contains({ name: 'moe', age: 40 }, 'maria')).to.equal(false);
     expect(_.contains([1, '2', 3, 4], 5)).to.equal(false);
   });
-  it('returns true if the value is present in a string', function () {
+  it('returns true if the value is present in a string', () => {
     expect(_.contains('Hello', 'e')).to.equal(true);
     expect(_.contains('Hello', 'o')).to.equal(true);
     expect(_.contains('Hello World', 'W')).to.equal(true);
   });
-  it('returns true if the value is present in an object', function () {
+  it('returns true if the value is present in an object', () => {
     expect(_.contains({ name: 'moe', age: 40 }, 'moe')).to.equal(true);
     expect(_.contains({ name: 'moe', age: 40 }, 40)).to.equal(true);
     expect(_.contains({ name: 'moe', age: 40 }, 'name')).to.equal(true);
     expect(_.contains({ name: 'moe', age: 40 }, 'age')).to.equal(true);
   });
-  it('returns true if the value is present in an array', function () {
+  it('returns true if the value is present in an array', () => {
     expect(_.contains([1, 2, 3, 4], 3)).to.equal(true);
     expect(_.contains([1, '2', 3, 4], '2')).to.equal(true);
   });
@@ -233,21 +233,52 @@ describe('#contains', function () {
 
 /** **********************************************/
 
-describe('#pluck', function () {
-  it('is a function', function () {
+describe('#pluck', () => {
+  it('is a function', () => {
     expect(_.pluck).to.be.a('function');
   });
-  it('should return an empty array for invalid arguments', function () {
+  it('should return an empty array for invalid arguments', () => {
     expect(_.pluck('str')).to.eql([]);
     expect(_.pluck(5)).to.eql([]);
     expect(_.pluck(undefined)).to.eql([]);
     expect(_.pluck({})).to.eql([]);
   });
-  it('return a array of property values', function () {
+  it('return a array of property values', () => {
     expect(_.pluck([{ name: 'moe', age: 40 }], 'age')).to.eql([40]);
     expect(_.pluck([{ name: 'moe', age: 40 }], 'name')).to.eql(['moe']);
     expect(_.pluck([{ name: 'moe', age: 40 }, { name: 'mia', age: 35 },
     { name: 'jack', age: 25 }], 'name')).to.eql(['moe', 'mia', 'jack']);
+  });
+});
+
+/** **********************************************/
+
+describe('#reduce', () => {
+  it('is a function', () => {
+    expect(_.reduce).to.be.a('function');
+  });
+  it('returns an empty array for invalid arguments', () => {
+    expect(_.reduce('str')).to.eql([]);
+    expect(_.reduce()).to.eql([]);
+    expect(_.reduce(undefined)).to.eql([]);
+  });
+  it('calls the iteratee as many times as elements in the list', () => {
+    const spy = sinon.spy();
+    _.reduce([1, 2, 3], spy);
+    expect(spy.callCount).to.eql(3);
+  });
+  it('passes (accumulator, item, index, list) to the iteratee', () => {
+    const spy = sinon.spy((total, num) => {
+      return total + num;
+    });
+    _.reduce([1, 2, 3], spy, 0);
+    expect(spy.firstCall.calledWithExactly(0, 1, 0, [1, 2, 3])).to.equal(true);
+  });
+  it('returns the sum of all the items in the list', () => {
+    expect(_.reduce([1, 2, 3, 4], (initial, item) => initial + item, 0)).to.eql(10);
+  });
+  it('returns the reduced list in 1 element', () => {
+    expect(_.reduce(['h', 'e', 'l', 'l', 'o'], (initial, item) => initial + item, '')).to.eql('hello');
   });
 });
 
