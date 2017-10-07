@@ -87,13 +87,13 @@ _.uniq = function (array) {
   return uniqueArray;
 };
 
-_.map = function (array, iteratee) {
+_.map = function (list, iteratee) {
   let newArray = [];
   let nestedArray = [];
 
-  if (Array.isArray(array)) {
+  if (Array.isArray(list)) {
 
-    _.each(array, (element) => {
+    _.each(list, (element) => {
       if (Array.isArray(element)) {
 
         for (var i = 0; i < element.length; i++) {
@@ -110,9 +110,9 @@ _.map = function (array, iteratee) {
   }
 
   // for objects
-  if (typeof array === 'object' && !Array.isArray(array)) {
-    for (var key in array) {
-      newArray.push(iteratee(array[key]));
+  if (typeof list === 'object' && !Array.isArray(list)) {
+    for (var key in list) {
+      newArray.push(iteratee(list[key]));
     }
   }
   return newArray;
@@ -144,11 +144,19 @@ _.contains = function (input, value) {
 _.pluck = function (list, propertyName) {
   if (!Array.isArray(list)) return [];
   var newArr = [];
-  for (var i = 0; i < list.length; i++) {
-    for (var key in list[i]) {
-      if (propertyName === key) { newArr.push(list[i][propertyName]); }
+
+  _.map(list, (element) => {
+    for (var key in element) {
+      if (propertyName === key)  newArr.push(element[propertyName]); 
     }
-  }
+  });
+
+  //* **************WITHOUT MAP****************
+  // for (var i = 0; i < list.length; i++) {
+    // for (var key in list[i]) {
+    //   if (propertyName === key) { newArr.push(list[i][propertyName]); }
+    // }
+  // }
   return newArr;
 };
 
