@@ -1,0 +1,22 @@
+{
+  "name": "lowbar",
+  "private": true,
+  "version": "0.0.0",
+  "dependencies": {},
+  "scripts": {
+    "test": "mocha ./spec/",
+    "lint": "eslint --fix ./",
+    "posttest": "npm run lint",
+    "precommit": "npm test"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "eslint": "^3.15.0",
+    "husky": "^0.13.1",
+    "sinon": "^3.2.1"
+  },
+  "description": "Lowbar is my own replica of the JS library \"_underscore\", in order to understand how a JS library works i'll be reimplementing the functionality of every _underscore function.",
+  "main": "lowbar.js",
+  "author": "Diego Partipilo",
+  "license": "ISC"
+}
