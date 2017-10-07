@@ -68,7 +68,7 @@ _.reject = function (list, predicate) {
   return result;
 };
 
-_.uniq = function (array, isSorted) {
+_.uniq = function (array) {
   if (!Array.isArray(array)) return [];
 
   let uniqueArray = [];
@@ -85,6 +85,38 @@ _.uniq = function (array, isSorted) {
   //     uniqueArray.push(array[i]);
   // }
   return uniqueArray;
+};
+
+_.map = function (array, iteratee) {
+  let newArray = [];
+  let nestedArray = [];
+
+  if (Array.isArray(array)) {
+
+    _.each(array, (element) => {
+      if (Array.isArray(element)) {
+
+        for (var i = 0; i < element.length; i++) {
+          nestedArray.push(iteratee(element[i]));
+        }
+        newArray.push(nestedArray);
+        nestedArray = [];
+      }
+
+      if (!Array.isArray(element)) {
+        newArray.push(iteratee(element));
+      }
+    });
+
+  }
+
+  // for objects
+  if (typeof array === 'object' && !Array.isArray(array)) {
+    for (var key in array) {
+      newArray.push(iteratee(array[key]));
+    }
+  }
+  return newArray;
 };
 
 

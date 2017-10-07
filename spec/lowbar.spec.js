@@ -164,25 +164,43 @@ describe('#reject', () => {
 
 /** **********************************************/
 
-describe('#uniq', function () {
-  it('is a function', function () {
+describe('#uniq', () => {
+  it('is a function', () => {
     expect(_.uniq).to.be.a('function');
   });
-  it('returns an empty array for invalid arguments', function () {
+  it('returns an empty array for invalid arguments', () => {
     expect(_.uniq('test')).to.eql([]);
     expect(_.uniq({})).to.eql([]);
     expect(_.uniq(4)).to.eql([]);
   });
-  it('returns an array with only 1st occurence of each value', function () {
+  it('returns an array with only 1st occurence of each value', () => {
     expect(_.uniq([1, 2, 2, 3, 3, 1, 4])).to.eql([1, 2, 3, 4]);
     expect(_.uniq([1, 2, '2', 3, 3, '2', 1, 4])).to.eql([1, 2, '2', 3, 4]);
     expect(_.uniq([1, 2, [2, 3], 3, 1, 4])).to.eql([1, 2, [2, 3], 3, 4]);
   });
+});
 
-  it('if the array is sorted runs a faster algorithm', function () {
-    expect(_.uniq([1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 6, 6, 7, 7, 7, 8, 8, 8, 8])).to.eql([1, 2, 3, 4, 5, 6, 7, 8]);
+/** **********************************************/
 
+describe.only('#map', () => {
+  it('is a function', () => {
+    expect(_.map).to.be.a('function');
   });
+  it('return an empty array if the argument is not an array', () => {
+    expect(_.map(5)).to.eql([]);
+    expect(_.map(true)).to.eql([]);
+    expect(_.map(undefined)).to.eql([]);
+  });
+  it('Produces a new array of values by mapping each value in list through a transformation function (iteratee)', () => {
+    expect(_.map([1, 2, 3], (num) => num * 3)).to.eql([3, 6, 9]);
+  });
+  it('works for nested arrays', () => {
+    expect(_.map([[1, 2, 3], [4, 5, 6]], (num) => num * 3)).to.eql([[3, 6, 9], [12, 15, 18]]);
+  });
+  it('if it\'s and objecct, it returns an array with the resulted values', () => {
+    expect(_.map({ one: 1, two: 2, three: 3 }, (num) => num * 3)).to.eql([3, 6, 9]);
+  });
+
 });
 
 /** **********************************************/
