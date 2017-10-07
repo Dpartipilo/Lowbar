@@ -1,10 +1,10 @@
 var path = require('path');
 var expect = require('chai').expect;
-var sinon = require('sinon');
+// var sinon = require('sinon');
 var _ = require(path.join(__dirname, '..', './lowbar.js'));
 
-/*************************************************/
-describe('_', function () {
+/** ***********************************************/
+xdescribe('_', function () {
   'use strict';
 
   it('is an object', function () {
@@ -24,4 +24,49 @@ describe('_', function () {
   });
 });
 
-/*************************************************/
+/** **********************************************/
+
+describe('#first', function () {
+  it('is a function', function () {
+    expect(_.first).to.be.a('function');
+  });
+  it('returns an empty array for invalid input', function () {
+    expect(_.first()).to.eql([]);
+    expect(_.first(5)).to.eql([]);
+    expect(_.first('string')).to.eql([]);
+    expect(_.first({})).to.eql([]);
+  });
+  it('returns the first index of the array', function () {
+    expect(_.first([1, 2, 3])).to.eql(1);
+    expect(_.first(['A', 'B', 'C'])).to.eql('A');
+  });
+  it('returns the first n elements of the array when a 2nd argument is given.', function () {
+    expect(_.first.length).to.equal(2);
+    expect(_.first([1, 2, 3, 4], 2)).to.eql([1, 2]);
+    expect(_.first([1, 2, '3', '4', 5, 6, 7], 4)).to.eql([1, 2, '3', '4']);
+    expect(_.first([1, 2, '3', { name: 'catch' }, 5, 6, 7], 4)).to.eql([1, 2, '3', { name: 'catch' }]);
+  });
+});
+
+/** **********************************************/
+
+describe('#last', function () {
+  it('is a function', function () {
+    expect(_.last).to.be.a('function');
+  });
+  it('returns an empty array for invalid input', function () {
+    expect(_.last()).to.eql([]);
+  });
+  it('returns the last index of the array', function () {
+    expect(_.last([1, 2, 3])).to.eql(3);
+    expect(_.last(['A', 'B', 'C'])).to.eql('C');
+  });
+  it('returns the last n elements of the array when a 2nd argument is given.', function () {
+    expect(_.last.length).to.equal(2);
+    expect(_.last([1, 2, 3, 4], 2)).to.eql([3, 4]);
+    expect(_.last([1, 2, '3', '4', 5, 6, 7], 4)).to.eql(['4', 5, 6, 7]);
+    expect(_.last([4, 5, 1, 2, '3', { name: 'catch' }], 4)).to.eql([1, 2, '3', { name: 'catch' }]);
+  });
+});
+
+/** **********************************************/

@@ -1,6 +1,6 @@
 # Lowbar 
 
-Lowbar is my own replica of the JS library "_underscore", in order to understand how a JS library works i'll be reimplementing the functionality of every _underscore function.
+Lowbar is my own replica of the JS library "_underscore", in order to understand how a JS library works I'll be reimplementing the functionality of every _underscore function.
 
 
 ## Core
