@@ -1,10 +1,10 @@
-var path = require('path');
-var expect = require('chai').expect;
-// var sinon = require('sinon');
-var _ = require(path.join(__dirname, '..', './lowbar.js'));
+const path = require('path');
+const expect = require('chai').expect;
+const sinon = require('sinon');
+const _ = require(path.join(__dirname, '..', './lowbar.js'));
 
 /** ***********************************************/
-xdescribe('_', function () {
+describe('_', function () {
   'use strict';
 
   it('is an object', function () {
@@ -66,6 +66,38 @@ describe('#last', function () {
     expect(_.last([1, 2, 3, 4], 2)).to.eql([3, 4]);
     expect(_.last([1, 2, '3', '4', 5, 6, 7], 4)).to.eql(['4', 5, 6, 7]);
     expect(_.last([4, 5, 1, 2, '3', { name: 'catch' }], 4)).to.eql([1, 2, '3', { name: 'catch' }]);
+  });
+});
+
+/** **********************************************/
+
+describe('#each', function () {
+  it('is a function', function () {
+    expect(_.each).to.be.a('function');
+  });
+  it('it should count the number of iterations in the function', function () {
+    const spy = sinon.spy();
+    _.each([1, 2, 3], spy);
+    expect(spy.callCount).to.equal(3);
+  });
+  it('calls the iteratee passing each element of the array as the first argument', function () {
+    const spy = sinon.spy();
+    _.each([1, 2, 3], spy);
+    expect(spy.firstCall.calledWithExactly(1, 0, [1, 2, 3])).to.equal(true);
+    expect(spy.secondCall.calledWithExactly(2, 1, [1, 2, 3])).to.equal(true);
+    expect(spy.thirdCall.calledWithExactly(3, 2, [1, 2, 3])).to.equal(true);
+  });
+  it('works for objects', function () {
+    const spy = sinon.spy();
+    _.each({ one: 1, two: 2, three: 3 }, spy);
+    expect(spy.callCount).to.equal(3);
+  });
+  it('calls the iteratee passing each element of the object as the first argument', function () {
+    const spy = sinon.spy();
+    _.each({ one: 1, two: 2, three: 3 }, spy);
+    expect(spy.firstCall.calledWithExactly(1, 'one', { one: 1, two: 2, three: 3 })).to.equal(true);
+    expect(spy.secondCall.calledWithExactly(2, 'two', { one: 1, two: 2, three: 3 })).to.equal(true);
+    expect(spy.thirdCall.calledWithExactly(3, 'three', { one: 1, two: 2, three: 3 })).to.equal(true);
   });
 });
 
