@@ -103,12 +103,12 @@ describe('#each', function () {
 
 /** **********************************************/
 
-describe.only('#indexOf', function () {
+describe('#indexOf', function () {
   it('is a function', function () {
     expect(_.indexOf).to.be.a('function');
   });
 
-  it('is a function', function () {
+  it('the function takes 3 arguments 3rd boolean [optional]', function () {
     expect(_.indexOf.length).to.equal(3);
   });
 
