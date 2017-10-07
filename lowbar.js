@@ -134,6 +134,7 @@ _.contains = function (input, value) {
   if (typeof input === 'object' && !Array.isArray(input)) {
     for (var key in input) {
       if (input[key] === value) return true;
+      else if (key === value) return true;
     }
   }
   return false;

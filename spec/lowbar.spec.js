@@ -222,6 +222,8 @@ describe.only('#contains', function () {
   it('returns true if the value is present in an object', function () {
     expect(_.contains({ name: 'moe', age: 40 }, 'moe')).to.equal(true);
     expect(_.contains({ name: 'moe', age: 40 }, 40)).to.equal(true);
+    expect(_.contains({ name: 'moe', age: 40 }, 'name')).to.equal(true);
+    expect(_.contains({ name: 'moe', age: 40 }, 'age')).to.equal(true);
   });
   it('returns true if the value is present in an array', function () {
     expect(_.contains([1, 2, 3, 4], 3)).to.equal(true);
