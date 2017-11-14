@@ -2,7 +2,11 @@
   "name": "lowbar",
   "private": true,
   "version": "0.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "mocha": "^4.0.1",
+    "chai": "^3.5.0",
+    "sinon": "^3.3.0"
+  },
   "scripts": {
     "test": "mocha ./spec/",
     "lint": "eslint --fix ./",
@@ -13,7 +17,7 @@
     "chai": "^3.5.0",
     "eslint": "^3.15.0",
     "husky": "^0.13.1",
-    "sinon": "^3.2.1"
+    "sinon": "^3.3.0"
   },
   "description": "Lowbar is my own replica of the JS library _underscore",
   "main": "lowbar.js",
