@@ -15,7 +15,7 @@
     "husky": "^0.13.1",
     "sinon": "^3.2.1"
   },
-  "description": "Lowbar is my own replica of the JS library \"_underscore\", in order to understand how a JS library works i'll be reimplementing the functionality of every _underscore function.",
+  "description": "Lowbar is my own replica of the JS library _underscore",
   "main": "lowbar.js",
   "author": "Diego Partipilo",
   "license": "ISC"

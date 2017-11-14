@@ -3,38 +3,35 @@ const expect = require('chai').expect;
 const sinon = require('sinon');
 const _ = require(path.join(__dirname, '..', './lowbar.js'));
 
-/** ***********************************************/
 describe('_', () => {
   'use strict';
-
   it('is an object', () => {
     expect(_).to.be.an('object');
   });
-  describe('#identity', () => {
-    it('is a function', () => {
-      expect(_.identity).to.be.a('function');
-    });
-    it('returns the same output as the argument', () => {
-      expect(_.identity('hello')).to.equal('hello');
-      expect(_.identity(123)).to.equal(123);
-      expect(_.identity([1, 2, '3', 4, 5])).to.eql([1, 2, '3', 4, 5]);
-      expect(_.identity(true)).to.eql(true);
-      expect(_.identity({ name: 'Tom' })).to.eql({ name: 'Tom' });
-    });
-  });
 });
 
-/** **********************************************/
+describe('#identity', () => {
+  it('is a function', () => {
+    expect(_.identity).to.be.a('function');
+  });
+  it('returns the same output as the argument', () => {
+    expect(_.identity('hello')).to.equal('hello');
+    expect(_.identity(123)).to.equal(123);
+    expect(_.identity([1, 2, '3', 4, 5])).to.eql([1, 2, '3', 4, 5]);
+    expect(_.identity(true)).to.equal(true);
+    expect(_.identity({ name: 'Tom' })).to.eql({ name: 'Tom' });
+  });
+});
 
 describe('#first', () => {
   it('is a function', () => {
     expect(_.first).to.be.a('function');
   });
-  it('returns an empty array for invalid input', () => {
-    expect(_.first()).to.eql([]);
-    expect(_.first(5)).to.eql([]);
-    expect(_.first('string')).to.eql([]);
-    expect(_.first({})).to.eql([]);
+  it('returns undefined for invalid input', () => {
+    expect(_.first()).to.be.undefined;
+    expect(_.first(5)).to.be.undefined;
+    expect(_.first('string')).to.be.undefined;
+    expect(_.first({})).to.be.undefined;
   });
   it('returns the first index of the array', () => {
     expect(_.first([1, 2, 3])).to.eql(1);
@@ -48,14 +45,14 @@ describe('#first', () => {
   });
 });
 
-/** **********************************************/
-
 describe('#last', () => {
   it('is a function', () => {
     expect(_.last).to.be.a('function');
   });
-  it('returns an empty array for invalid input', () => {
-    expect(_.last()).to.eql([]);
+  it('returns undefined for invalid input', () => {
+    expect(_.last(123)).to.be.undefined;
+    expect(_.last(false)).to.be.undefined;
+    expect(_.last({ 1: 'a', 2: 'b', 3: 'c', })).to.be.undefined;
   });
   it('returns the last index of the array', () => {
     expect(_.last([1, 2, 3])).to.eql(3);
@@ -69,11 +66,12 @@ describe('#last', () => {
   });
 });
 
-/** **********************************************/
-
 describe('#each', () => {
   it('is a function', () => {
     expect(_.each).to.be.a('function');
+  });
+  it('returns the list if no iteratee is passed', () => {
+    expect(_.each([1, 2, 3, 4, 5])).to.eql([1, 2, 3, 4, 5]);
   });
   it('it should count the number of iterations in the function', () => {
     const spy = sinon.spy();
@@ -87,46 +85,46 @@ describe('#each', () => {
     expect(spy.secondCall.calledWithExactly(2, 1, [1, 2, 3])).to.equal(true);
     expect(spy.thirdCall.calledWithExactly(3, 2, [1, 2, 3])).to.equal(true);
   });
-  it('works for objects', () => {
-    const spy = sinon.spy();
-    _.each({ one: 1, two: 2, three: 3 }, spy);
-    expect(spy.callCount).to.equal(3);
-  });
-  it('calls the iteratee passing each element of the object as the first argument', () => {
-    const spy = sinon.spy();
-    _.each({ one: 1, two: 2, three: 3 }, spy);
-    expect(spy.firstCall.calledWithExactly(1, 'one', { one: 1, two: 2, three: 3 })).to.equal(true);
-    expect(spy.secondCall.calledWithExactly(2, 'two', { one: 1, two: 2, three: 3 })).to.equal(true);
-    expect(spy.thirdCall.calledWithExactly(3, 'three', { one: 1, two: 2, three: 3 })).to.equal(true);
+  describe('works for objects', () => {
+    it('it should count the number of iterations in the function', () => {
+      const spy = sinon.spy();
+      _.each({ one: 1, two: 2, three: 3 }, spy);
+      expect(spy.callCount).to.equal(3);
+    });
+    it('calls the iteratee passing each element of the object as the first argument', () => {
+      const spy = sinon.spy();
+      _.each({ one: 1, two: 2, three: 3 }, spy);
+      expect(spy.firstCall.calledWithExactly(1, 'one', { one: 1, two: 2, three: 3 })).to.equal(true);
+      expect(spy.secondCall.calledWithExactly(2, 'two', { one: 1, two: 2, three: 3 })).to.equal(true);
+      expect(spy.thirdCall.calledWithExactly(3, 'three', { one: 1, two: 2, three: 3 })).to.equal(true);
+    });
+    it('binds the iteratee to the context if one is given', () => {
+      const context = ['D', 'i', 'e', 'g', 'o'];
+      const result = [];
+      _.each([0, 1, 2, 3, 4], function (num) { result.push(this[num]); }, context);
+      expect(result).to.eql(['D', 'i', 'e', 'g', 'o']);
+    });
   });
 });
-
-/** **********************************************/
 
 describe('#indexOf', () => {
   it('is a function', () => {
     expect(_.indexOf).to.be.a('function');
   });
-
   it('the function takes 3 arguments 3rd boolean [optional]', () => {
     expect(_.indexOf.length).to.equal(3);
   });
-
   it('return the index of the value in the array', () => {
     expect(_.indexOf([1, 2, 3, 'a'], 3)).to.eql(2);
     expect(_.indexOf([1, 2, 3, 'a'], 'a')).to.eql(3);
   });
-
   it('return -1 if value is not present in the array', () => {
     expect(_.indexOf([1, 2, 3, 'a'], 4)).to.eql(-1);
   });
-
   it('if the array is sorted apply binary search', () => {
     expect(_.indexOf([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 9, true)).to.eql(8);
   });
 });
-
-/** **********************************************/
 
 describe('#filter', () => {
   it('is a function', () => {
@@ -144,8 +142,6 @@ describe('#filter', () => {
   });
 });
 
-/** **********************************************/
-
 describe('#reject', () => {
   it('is a function', () => {
     expect(_.reject).to.be.a('function');
@@ -161,8 +157,6 @@ describe('#reject', () => {
     expect(_.reject([1, 'a', 3, 'b'], (elem) => typeof elem === 'string')).to.eql([1, 3]);
   });
 });
-
-/** **********************************************/
 
 describe('#uniq', () => {
   it('is a function', () => {
@@ -180,30 +174,35 @@ describe('#uniq', () => {
   });
 });
 
-/** **********************************************/
-
 describe('#map', () => {
   it('is a function', () => {
     expect(_.map).to.be.a('function');
   });
   it('return an empty array if the argument is not an array', () => {
-    expect(_.map(5)).to.eql([]);
-    expect(_.map(true)).to.eql([]);
     expect(_.map(undefined)).to.eql([]);
+    expect(_.map(5, (num) => { return num * 2; })).to.eql([]);
+    expect(_.map(true, (bool) => { return bool === true; })).to.eql([]);
   });
   it('Produces a new array of values by mapping each value in list through a transformation function (iteratee)', () => {
     expect(_.map([1, 2, 3], (num) => num * 3)).to.eql([3, 6, 9]);
   });
-  it('works for nested arrays', () => {
-    expect(_.map([[1, 2, 3], [4, 5, 6]], (num) => num * 3)).to.eql([[3, 6, 9], [12, 15, 18]]);
+  describe('works for objects', () => {
+    it('if it\'s and object, it returns an array with the resulted values', () => {
+      expect(_.map({ one: 1, two: 2, three: 3 }, (num) => num * 3)).to.eql([3, 6, 9]);
+    });
   });
-  it('if it\'s and objecct, it returns an array with the resulted values', () => {
-    expect(_.map({ one: 1, two: 2, three: 3 }, (num) => num * 3)).to.eql([3, 6, 9]);
+  it('binds the iteratee to the context if one is given', () => {
+    const context = [1, 2, 3, 4, 5];
+    const result = [];
+    _.map([0, 1, 2, 3, 4], function (num) { result.push(this[num] + num); }, context);
+    expect(result).to.eql([1, 3, 5, 7, 9]);
   });
-
+  describe('works for nested arrays', () => {
+    it('iterates with all the elements of each nested array', () => {
+      expect(_.map([[1, 2, 3], [4, 5, 6]], (num) => num * 3)).to.eql([[3, 6, 9], [12, 15, 18]]);
+    });
+  });
 });
-
-/** **********************************************/
 
 describe('#contains', () => {
   it('is a function', () => {
@@ -231,55 +230,57 @@ describe('#contains', () => {
   });
 });
 
-/** **********************************************/
-
 describe('#pluck', () => {
   it('is a function', () => {
     expect(_.pluck).to.be.a('function');
   });
-  it('should return an empty array for invalid arguments', () => {
-    expect(_.pluck('str')).to.eql([]);
-    expect(_.pluck(5)).to.eql([]);
-    expect(_.pluck(undefined)).to.eql([]);
-    expect(_.pluck({})).to.eql([]);
+  it('should return undefined for invalid arguments', () => {
+    expect(_.pluck('str')).to.be.undefined;
+    expect(_.pluck(5)).to.be.undefined;
+    expect(_.pluck(undefined)).to.be.undefined;
+    expect(_.pluck({})).to.be.undefined;
   });
   it('return a array of property values', () => {
     expect(_.pluck([{ name: 'moe', age: 40 }], 'age')).to.eql([40]);
     expect(_.pluck([{ name: 'moe', age: 40 }], 'name')).to.eql(['moe']);
-    expect(_.pluck([{ name: 'moe', age: 40 }, { name: 'mia', age: 35 },
-    { name: 'jack', age: 25 }], 'name')).to.eql(['moe', 'mia', 'jack']);
+    expect(_.pluck([
+      { name: 'moe', age: 40 },
+      { name: 'mia', age: 35 },
+      { name: 'jack', age: 25 }], 'name'))
+      .to.eql(['moe', 'mia', 'jack']);
   });
 });
 
-/** **********************************************/
-
 describe('#reduce', () => {
-  it('is a function', () => {
-    expect(_.reduce).to.be.a('function');
-  });
-  it('returns an empty array for invalid arguments', () => {
-    expect(_.reduce('str')).to.eql([]);
-    expect(_.reduce()).to.eql([]);
-    expect(_.reduce(undefined)).to.eql([]);
+  it('returns undefined for invalid arguments', () => {
+    expect(_.reduce('str')).to.be.undefined;
+    expect(_.reduce({})).to.be.undefined;
+    expect(_.reduce(undefined)).to.be.undefined;
   });
   it('calls the iteratee as many times as elements in the list', () => {
     const spy = sinon.spy();
     _.reduce([1, 2, 3], spy);
     expect(spy.callCount).to.eql(3);
   });
-  it('passes (accumulator, item, index, list) to the iteratee', () => {
-    const spy = sinon.spy((total, num) => {
-      return total + num;
+  it('passes (accumulator, element, index, list) to the iteratee', () => {
+    const spy = sinon.spy((memo, element) => {
+      return memo + element;
     });
     _.reduce([1, 2, 3], spy, 0);
     expect(spy.firstCall.calledWithExactly(0, 1, 0, [1, 2, 3])).to.equal(true);
+    expect(spy.secondCall.calledWithExactly(1, 2, 1, [1, 2, 3])).to.equal(true);
   });
-  it('returns the sum of all the items in the list', () => {
-    expect(_.reduce([1, 2, 3, 4], (initial, item) => initial + item, 0)).to.eql(10);
+  it('returns the sum of all the elements in the list', () => {
+    expect(_.reduce([1, 2, 3, 4], (memo, element) => memo + element, 0)).to.equal(10);
   });
-  it('returns the reduced list in 1 element', () => {
-    expect(_.reduce(['h', 'e', 'l', 'l', 'o'], (initial, item) => initial + item, '')).to.eql('hello');
+  it('returns the reduced list into a string', () => {
+    expect(_.reduce(['h', 'e', 'l', 'l', 'o'], (memo, element) => memo + element, '')).to.equal('hello');
+  });
+  it('should take the first element in the list if no memo is passed', () => {
+    expect(_.reduce([5, 2, 3, 4], (memo, element) => memo + element)).to.equal(14);
+  });
+  it('binds the iteratee to the context if one is given', () => {
+    const context = [2,3,4,5,6];
+    expect(_.reduce([1, 2, 3, 4], function (memo, element) {return  memo + this[element]; }, 0, context)).to.equal(18);
   });
 });
-
-/** **********************************************/

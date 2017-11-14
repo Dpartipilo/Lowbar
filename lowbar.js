@@ -1,24 +1,26 @@
-var _ = {};
+const _ = {};
 
 _.identity = function (value) {
   return value;
 };
 
 _.first = function (array, n) {
-  if (!Array.isArray(array)) return [];
+  if (!Array.isArray(array)) return undefined;
   if (n) return array.slice(0, n);
   return array[0];
 };
 
 _.last = function (array, n) {
-  if (!Array.isArray(array)) return [];
+  if (!Array.isArray(array)) return undefined;
   if (n) return array.slice(-n);
   return array[array.length - 1];
 };
 
-_.each = function (list, iteratee) {
+_.each = function (list, iteratee, context) {
+  if (!iteratee) return list;
+  if (context) iteratee = iteratee.bind(context);
   if (Array.isArray(list) || typeof list === 'string') {
-    for (var i = 0; i < list.length; i++) {
+    for (let i = 0; i < list.length; i++) {
       iteratee(list[i], i, list);
     }
   }
@@ -27,10 +29,10 @@ _.each = function (list, iteratee) {
       iteratee(list[key], key, list);
     }
   }
+  return list;
 };
 
 _.indexOf = function (array, value, isSorted) {
-
   if (isSorted) {
     let low = 1, high = array.length;
     while (low <= high) {
@@ -40,19 +42,16 @@ _.indexOf = function (array, value, isSorted) {
       else high = mid - 1;
     }
   }
-
-  for (var i = 0; i < array.length; i++) {
+  for (let i = 0; i < array.length; i++) {
     if (array[i] === value) return i;
   }
   return -1;
 };
 
-
 _.filter = function (list, predicate) {
   if (!Array.isArray(list)) return [];
   let result = [];
-
-  for (var i = 0; i < list.length; i++) {
+  for (let i = 0; i < list.length; i++) {
     if (predicate(list[i])) result.push(list[i]);
   }
   return result;
@@ -61,8 +60,7 @@ _.filter = function (list, predicate) {
 _.reject = function (list, predicate) {
   if (!Array.isArray(list)) return [];
   let result = [];
-
-  for (var i = 0; i < list.length; i++) {
+  for (let i = 0; i < list.length; i++) {
     if (!predicate(list[i])) result.push(list[i]);
   }
   return result;
@@ -70,9 +68,7 @@ _.reject = function (list, predicate) {
 
 _.uniq = function (array) {
   if (!Array.isArray(array)) return [];
-
   let uniqueArray = [];
-
   _.each(array, (element) => {
     if (!uniqueArray.includes(element)) {
       uniqueArray.push(element);
@@ -80,42 +76,39 @@ _.uniq = function (array) {
   });
 
   // ***********WITHOUT _.each*************
-  // for (var i = 0; i < array.length; i++) {
+  // for (let i = 0; i < array.length; i++) {
   //   if (!uniqueArray.includes(array[i]))
   //     uniqueArray.push(array[i]);
   // }
   return uniqueArray;
 };
 
-_.map = function (list, iteratee) {
-  let newArray = [];
-  let nestedArray = [];
+_.map = function (list, iteratee, context) {
+  if (context) iteratee = iteratee.bind(context);
+  let newList = [];
+  let nestedList = [];
 
   if (Array.isArray(list)) {
-
     _.each(list, (element) => {
       if (Array.isArray(element)) {
-
-        for (var i = 0; i < element.length; i++) {
-          nestedArray.push(iteratee(element[i]));
+        for (let i = 0; i < element.length; i++) {
+          nestedList.push(iteratee(element[i]));
         }
-        newArray.push(nestedArray);
-        nestedArray = [];
+        newList.push(nestedList);
+        nestedList = [];
       }
-
       if (!Array.isArray(element)) {
-        newArray.push(iteratee(element));
+        newList.push(iteratee(element));
       }
     });
   }
-
   // for objects
   if (typeof list === 'object' && !Array.isArray(list)) {
-    for (var key in list) {
-      newArray.push(iteratee(list[key]));
+    for (let key in list) {
+      newList.push(iteratee(list[key]));
     }
   }
-  return newArray;
+  return newList;
 };
 
 _.contains = function (input, value) {
@@ -132,7 +125,7 @@ _.contains = function (input, value) {
     }
   }
   if (typeof input === 'object' && !Array.isArray(input)) {
-    for (var key in input) {
+    for (let key in input) {
       if (input[key] === value) return true;
       else if (key === value) return true;
     }
@@ -142,31 +135,35 @@ _.contains = function (input, value) {
 
 
 _.pluck = function (list, propertyName) {
-  if (!Array.isArray(list)) return [];
-  var newArr = [];
+  if (!Array.isArray(list)) return undefined;
+  let newArr = [];
 
   _.map(list, (element) => {
-    for (var key in element) {
+    for (let key in element) {
       if (propertyName === key) newArr.push(element[propertyName]);
     }
   });
 
-  //* **************WITHOUT MAP****************
-  // for (var i = 0; i < list.length; i++) {
-  // for (var key in list[i]) {
-  //   if (propertyName === key) { newArr.push(list[i][propertyName]); }
-  // }
+  // *************** WITHOUT MAP ****************
+  // for (let i = 0; i < list.length; i++) {
+  //   for (let key in list[i]) {
+  //     if (propertyName === key) { newArr.push(list[i][propertyName]); }
+  //   }
   // }
   return newArr;
 };
 
-_.reduce = function (list, iteratee, memo) {
-  if (!Array.isArray(list)) return [];
+_.reduce = function (list, iteratee, memo, context) {
+  if (!Array.isArray(list)) return undefined;
+  if (context) iteratee = iteratee.bind(context);
 
-  for (let i = 0; i < list.length; i++) {
-    memo = iteratee(memo, list[i], i, list);
-  }
-
+  _.each(list, (element, index, list) => {
+    if (memo === undefined) {
+      memo = element;
+      iteratee(memo, element, index, list);
+    }
+    else memo = iteratee(memo, element, index, list);
+  });
   return memo;
 };
 
