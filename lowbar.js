@@ -168,4 +168,22 @@ _.reduce = function (list, iteratee, memo, context) {
 };
 
 
+_.every = function (list, predicate, context) {
+  if (!Array.isArray(list)) return true;
+  if (context) predicate = predicate.bind(context);
+
+  if (Array.isArray(list) || typeof list === 'string') {
+    for (let i = 0; i < list.length; i++) {
+      if (!predicate(list[i])) return false;
+    }
+  }
+  if (typeof list === 'object' && !Array.isArray(list)) {
+    for (let key in list) {
+      if (!predicate(list[key])) return false;
+    }
+  }
+  return true;
+};
+
+
 module.exports = _;

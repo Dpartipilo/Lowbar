@@ -27,7 +27,7 @@ describe('#first', () => {
   it('is a function', () => {
     expect(_.first).to.be.a('function');
   });
-  it('returns undefined for invalid input', () => {
+  it('returns undefined for invalid arguments', () => {
     expect(_.first()).to.be.undefined;
     expect(_.first(5)).to.be.undefined;
     expect(_.first('string')).to.be.undefined;
@@ -178,7 +178,7 @@ describe('#map', () => {
   it('is a function', () => {
     expect(_.map).to.be.a('function');
   });
-  it('return an empty array if the argument is not an array', () => {
+  it('return an empty array if the passed argument is not an array', () => {
     expect(_.map(undefined)).to.eql([]);
     expect(_.map(5, (num) => { return num * 2; })).to.eql([]);
     expect(_.map(true, (bool) => { return bool === true; })).to.eql([]);
@@ -263,24 +263,51 @@ describe('#reduce', () => {
     expect(spy.callCount).to.eql(3);
   });
   it('passes (accumulator, element, index, list) to the iteratee', () => {
-    const spy = sinon.spy((memo, element) => {
-      return memo + element;
-    });
+    const spy = sinon.spy((memo, element) => memo + element);
     _.reduce([1, 2, 3], spy, 0);
     expect(spy.firstCall.calledWithExactly(0, 1, 0, [1, 2, 3])).to.equal(true);
     expect(spy.secondCall.calledWithExactly(1, 2, 1, [1, 2, 3])).to.equal(true);
   });
-  it('returns the sum of all the elements in the list', () => {
+  it('reduce a list of elements to a single element', () => {
     expect(_.reduce([1, 2, 3, 4], (memo, element) => memo + element, 0)).to.equal(10);
-  });
-  it('returns the reduced list into a string', () => {
     expect(_.reduce(['h', 'e', 'l', 'l', 'o'], (memo, element) => memo + element, '')).to.equal('hello');
   });
-  it('should take the first element in the list if no memo is passed', () => {
+  it('takes the first element in the list if no memo is passed', () => {
     expect(_.reduce([5, 2, 3, 4], (memo, element) => memo + element)).to.equal(14);
   });
   it('binds the iteratee to the context if one is given', () => {
-    const context = [2,3,4,5,6];
-    expect(_.reduce([1, 2, 3, 4], function (memo, element) {return  memo + this[element]; }, 0, context)).to.equal(18);
+    const context = [2, 3, 4, 5, 6];
+    expect(_.reduce([1, 2, 3, 4], function (memo, element) { return memo + this[element]; }, 0, context)).to.equal(18);
+  });
+});
+
+describe('#every', () => {
+  it('returns true if invalid arguments are passed', () => {
+    expect(_.every(true, () => { })).to.equal(true);
+    expect(_.every(null, () => { })).to.equal(true);
+    expect(_.every(1234, (element) => { return element % 2 === 0; })).to.equal(true);
+  });
+  it('returns true if all of the values in the list pass the predicate truth test.', () => {
+    expect(_.every([2, 4, 6], (element) => element % 2 === 0)).to.equal(true);
+  });
+  it('stops traversing the list if a false element is found.', () => {
+    const spy = sinon.spy((element) => element % 2 === 0);
+    _.every([2, 5, 6, 8, 10], spy);
+    expect(spy.callCount).to.eql(2);
+  });
+  it('binds the iteratee to the context if one is given', () => {
+    const context = [2, 4, 6];
+    expect(_.every([0, 1, 2], function (element) { return this[element] % 2 === 0; }, context)).to.equal(true);
+  });
+  describe('Works for strings', () => {
+    it('returns true if all of the values in the string pass the predicate truth test.', () => {
+      expect(_.every('Diego', (element) => typeof element === 'string')).to.equal(true);
+    });
+  });
+  describe('Works for objects', () => {
+    it('returns true if all of the values in the object pass the predicate truth test.', () => {
+      expect(_.every({ a: 1, b: 2, c: 3 }, (element) => element % 2 === 0)).to.equal(true);
+      expect(_.every({ a: 'D', b: 'P', c: 'M' }, (element) => typeof element === 'string')).to.equal(true);
+    });
   });
 });
