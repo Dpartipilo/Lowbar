@@ -306,8 +306,39 @@ describe('#every', () => {
   });
   describe('Works for objects', () => {
     it('returns true if all of the values in the object pass the predicate truth test.', () => {
-      expect(_.every({ a: 1, b: 2, c: 3 }, (element) => element % 2 === 0)).to.equal(true);
+      expect(_.every({ a: 2, b: 4, c: 6 }, (element) => element % 2 === 0)).to.equal(true);
       expect(_.every({ a: 'D', b: 'P', c: 'M' }, (element) => typeof element === 'string')).to.equal(true);
+    });
+  });
+});
+
+describe('#some', () => {
+  it('returns false if invalid arguments are passed', () => {
+    expect(_.some(true, () => { })).to.equal(false);
+    expect(_.some(null, () => { })).to.equal(false);
+    expect(_.some(1234, (element) => element % 2 === 0)).to.equal(false);
+  });
+  it('returns true if any of the values in the list pass the predicate truth test.', () => {
+    expect(_.some([null, 0, 'yes', false], (element) => element)).to.equal(true);
+  });
+  it('stops traversing the list if a true element is found.', () => {
+    const spy = sinon.spy((element) => element % 2 === 0);
+    _.some([3, 5, 6, 8, 10], spy);
+    expect(spy.callCount).to.eql(3);
+  });
+  it('binds the iteratee to the context if one is given', () => {
+    const context = [1, 3, 6];
+    expect(_.some([0, 1, 2], function (element) { return this[element] % 2 === 0; }, context)).to.equal(true);
+  });
+  describe('Works for strings', () => {
+    it('returns true if any of the values in the string pass the predicate truth test.', () => {
+      expect(_.some([1, undefined, 'Diego'], (element) => typeof element === 'string')).to.equal(true);
+    });
+  });
+  describe('Works for objects', () => {
+    it('returns true if any of the values in the object pass the predicate truth test.', () => {
+      expect(_.some({ a: 1, b: 2, c: 3 }, (element) => element % 2 === 0)).to.equal(true);
+      expect(_.some({ a: 5, b: 7, c: 'M' }, (element) => typeof element === 'string')).to.equal(true);
     });
   });
 });
