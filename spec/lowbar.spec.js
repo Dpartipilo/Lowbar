@@ -342,3 +342,31 @@ describe('#some', () => {
     });
   });
 });
+
+describe('#extend', () => {
+  it('is a function', () => {
+    expect(_.extend()).to.be.a.function;
+  });
+  it('returns destination if given invalid arguments', () => {
+    expect(_.extend(1234)).to.equal(1234);
+    expect(_.extend(null, {})).to.equal(null);
+    expect(_.extend('Diego', {age: 50})).to.equal('Diego');
+    expect(_.extend([1234], [123])).to.eql([123]);
+  });
+  it('should replace a value in the destination array with the value of the same index from the source array(s). The last source will override properties of the same index in previous arguments', function () {
+    expect(_.extend(['I was\'t', 'a', 'developer'], ['I am'])).to.eql(['I am', 'a', 'developer']);
+    expect(_.extend(['I wanted', 'to be a', 'developer'], ['worked hard to be', 'a'], ['I am'])).to.eql(['I am', 'a', 'developer']);
+    expect(_.extend(['http', 'angular', 'SQL'], ['https', 'React', ['TDD']], ['JavaScript'])).to.eql(['JavaScript', 'React', ['TDD']]);
+  });
+  it('should copy all of the properties in the source objects over to the destination object and return the destination object.', () => {
+    expect(_.extend({name: 'moe'}, {age: 50})).to.eql({name: 'moe', age: 50});
+    expect(_.extend({name: 'Mae'}, {age: 30}, {skill: 'Music'})).to.eql({name: 'Mae', age: 30, skill: 'Music'});
+    expect(_.extend({name: 'moe'}, {age: 50, pet: {name: 'Jack', type: 'dog'}}))
+    .to.eql({name: 'moe', age: 50, pet: {name: 'Jack', type: 'dog'}});
+  });
+  it('should copy all of the properties in the source objects over to the destination array, and return the destination array', function () {
+    let expected = ['Good', 'Music'];
+    expected.instrument = 'Piano';
+    expect(_.extend(['Good', 'Music'], { instrument: 'Piano' })).to.eql(expected);
+  });
+});

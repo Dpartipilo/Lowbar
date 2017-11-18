@@ -183,7 +183,7 @@ _.every = function (list, predicate, context) {
   return true;
 };
 
-_.some = function(list, predicate, context) {
+_.some = function (list, predicate, context) {
   if (context) predicate = predicate.bind(context);
   if (Array.isArray(list) || typeof list === 'string') {
     for (let i = 0; i < list.length; i++) {
@@ -198,5 +198,12 @@ _.some = function(list, predicate, context) {
   return false;
 };
 
+_.extend = function (destination, sources) {
+  if (typeof destination === 'object' && destination !== null) {
+    sources = [].slice.call(arguments, 1);
+      Object.assign(destination, ...sources);
+  }
+  return destination;
+};
 
 module.exports = _;

@@ -56,7 +56,7 @@ These are the core functions I will aim to get finished;
 12. reduce
 13. every
 14. some
-15. extends
+15. extend
 16. defaults
 17. once
 18. negate
