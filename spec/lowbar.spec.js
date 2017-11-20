@@ -350,7 +350,7 @@ describe('#extend', () => {
   it('returns destination if given invalid arguments', () => {
     expect(_.extend(1234)).to.equal(1234);
     expect(_.extend(null, {})).to.equal(null);
-    expect(_.extend('Diego', {age: 50})).to.equal('Diego');
+    expect(_.extend('Diego', { age: 50 })).to.equal('Diego');
     expect(_.extend([1234], [123])).to.eql([123]);
   });
   it('should replace a value in the destination array with the value of the same index from the source array(s). The last source will override properties of the same index in previous arguments', function () {
@@ -359,14 +359,41 @@ describe('#extend', () => {
     expect(_.extend(['http', 'angular', 'SQL'], ['https', 'React', ['TDD']], ['JavaScript'])).to.eql(['JavaScript', 'React', ['TDD']]);
   });
   it('should copy all of the properties in the source objects over to the destination object and return the destination object.', () => {
-    expect(_.extend({name: 'moe'}, {age: 50})).to.eql({name: 'moe', age: 50});
-    expect(_.extend({name: 'Mae'}, {age: 30}, {skill: 'Music'})).to.eql({name: 'Mae', age: 30, skill: 'Music'});
-    expect(_.extend({name: 'moe'}, {age: 50, pet: {name: 'Jack', type: 'dog'}}))
-    .to.eql({name: 'moe', age: 50, pet: {name: 'Jack', type: 'dog'}});
+    expect(_.extend({ name: 'moe' }, { age: 50 })).to.eql({ name: 'moe', age: 50 });
+    expect(_.extend({ name: 'Mae' }, { age: 30 }, { skill: 'Music' })).to.eql({ name: 'Mae', age: 30, skill: 'Music' });
+    expect(_.extend({ name: 'moe' }, { age: 50, pet: { name: 'Jack', type: 'dog' } }))
+      .to.eql({ name: 'moe', age: 50, pet: { name: 'Jack', type: 'dog' } });
   });
   it('should copy all of the properties in the source objects over to the destination array, and return the destination array', function () {
     let expected = ['Good', 'Music'];
     expected.instrument = 'Piano';
     expect(_.extend(['Good', 'Music'], { instrument: 'Piano' })).to.eql(expected);
+  });
+});
+
+describe('#defaults', () => {
+  it('is a function', () => {
+    expect(_.defaults()).to.be.a.function;
+  });
+  it('returns the object when invalid data type is given', () => {
+    expect(_.defaults(1234)).to.eql(1234);
+    expect(_.defaults('string')).to.eql('string');
+    expect(_.defaults([1234], [3456])).to.eql([1234]);
+    expect(_.defaults(1234, { music: 'jazz' })).to.eql(1234);
+    expect(_.defaults(true, { music: 'classic' })).to.eql(true);
+  });
+  it('Fills in undefined properties in object with the first value present in the following list of defaults objects.', () => {
+    let iceCream = { flavor: 'chocolate' };
+    expect(_.defaults(iceCream, { flavor: 'vanilla', sprinkles: 'lots' })).to.eql({ flavor: 'chocolate', sprinkles: 'lots' });
+    expect(_.defaults(iceCream, { flavor: 'vanilla' }, { sprinkles: 'lots' })).to.eql({ flavor: 'chocolate', sprinkles: 'lots' });
+  });
+  it('returns the array filled in with any unfilled index positions corresponding to index positions in any defaults array(s)', () => {
+    expect(_.defaults(['jazz', 'classic'], ['movies', 'rap', 'pop', 'opera'])).to.eql(['jazz', 'classic', 'pop', 'opera']);
+    expect(_.defaults(['jazz'], ['reggae', 'classic', 'movie theme'], ['rap', 'pop', 'gospel', 'instrumental'])).to.eql(['jazz', 'classic', 'movie theme', 'instrumental']);
+  });
+  it('returns the array with any undefined values filled in with corresponding information from the defaults object(s)', function () {
+    let expected = ['jazz', 'classic'];
+    expected.instrument = 'piano';
+    expect(_.defaults(['jazz', 'classic'], { instrument: 'piano' })).to.eql(expected);
   });
 });

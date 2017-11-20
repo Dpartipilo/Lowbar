@@ -201,9 +201,23 @@ _.some = function (list, predicate, context) {
 _.extend = function (destination, sources) {
   if (typeof destination === 'object' && destination !== null) {
     sources = [].slice.call(arguments, 1);
-      Object.assign(destination, ...sources);
+    Object.assign(destination, ...sources);
   }
   return destination;
+};
+
+_.defaults = function (object, defaults) {
+  for (let i = 1; i < arguments.length; i++) {
+    defaults = arguments[i];
+    for (let key in defaults) {
+      if (object[key] === undefined) {
+        object[key] = defaults[key];
+      }
+    }
+  }
+  return object;
+
+  
 };
 
 module.exports = _;
