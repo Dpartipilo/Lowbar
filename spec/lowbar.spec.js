@@ -397,3 +397,30 @@ describe('#defaults', () => {
     expect(_.defaults(['jazz', 'classic'], { instrument: 'piano' })).to.eql(expected);
   });
 });
+
+describe('#once', () => {
+  it('should be a function',  () => {
+    expect(_.once).to.be.a.function;
+  });
+  it('creates a version of the function that can only be called one time.', () => {
+    let spy = sinon.spy();
+    let spyOnce = _.once(spy);
+    spyOnce();
+    spyOnce();
+    expect(spy.callCount).to.equal(1);
+  });
+  it('should forward all the arguments from the returned function to the original function', () => {
+    let spy = sinon.spy();
+    let spyOnce = _.once(spy);
+    spyOnce(1, 2, 3);
+    expect(spy.calledWithExactly(1, 2, 3)).to.equal(true);
+  });
+  it('should always return the result of the first call', () => {
+    let doubles = _.once((n) => n * 2);
+    let results = [];
+    results.push(doubles(1));
+    results.push(doubles(2));
+    results.push(doubles(3));
+    expect(results).to.eql([2, 2, 2]);
+  });
+});

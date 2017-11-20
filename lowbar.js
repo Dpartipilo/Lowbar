@@ -216,8 +216,17 @@ _.defaults = function (object, defaults) {
     }
   }
   return object;
+};
 
-  
+_.once = function (fn) {
+  let returnValue, called = false;
+  return function () {
+    if (!called) {
+      called = true;
+      returnValue = fn.apply(this, arguments);
+    }
+    return returnValue;
+  };
 };
 
 module.exports = _;
