@@ -229,4 +229,10 @@ _.once = function (fn) {
   };
 };
 
+_.negate = function (predicate) {
+  return function () {
+    return !predicate.apply(this, arguments);
+  };
+};
+
 module.exports = _;

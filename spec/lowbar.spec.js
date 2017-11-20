@@ -399,7 +399,7 @@ describe('#defaults', () => {
 });
 
 describe('#once', () => {
-  it('should be a function',  () => {
+  it('should be a function', () => {
     expect(_.once).to.be.a.function;
   });
   it('creates a version of the function that can only be called one time.', () => {
@@ -422,5 +422,24 @@ describe('#once', () => {
     results.push(doubles(2));
     results.push(doubles(3));
     expect(results).to.eql([2, 2, 2]);
+  });
+});
+
+describe('#negate', () => {
+  const superman = {
+    name: 'Superman',
+    strength: 'Super',
+    heroism: true
+};
+  it('is a function', () => {
+    expect(_.negate).to.be.a.function;
+  });
+  it('returns a new negated version of the predicate function', () => {
+    function isSuperStrong (character) {
+      return character.strength === 'Super';
+  }
+  let result = _.negate(isSuperStrong); 
+    expect(result(superman)).to.equal(false);
+    expect(!result(superman)).to.equal(true);
   });
 });
