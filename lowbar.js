@@ -86,28 +86,9 @@ _.uniq = function (array) {
 _.map = function (list, iteratee, context) {
   if (context) iteratee = iteratee.bind(context);
   let newList = [];
-  let nestedList = [];
-
-  if (Array.isArray(list)) {
-    _.each(list, (element) => {
-      if (Array.isArray(element)) {
-        for (let i = 0; i < element.length; i++) {
-          nestedList.push(iteratee(element[i]));
-        }
-        newList.push(nestedList);
-        nestedList = [];
-      }
-      if (!Array.isArray(element)) {
-        newList.push(iteratee(element));
-      }
-    });
-  }
-  // for objects
-  if (typeof list === 'object' && !Array.isArray(list)) {
-    for (let key in list) {
-      newList.push(iteratee(list[key]));
-    }
-  }
+  _.each(list, (element, index, list) => {
+    newList.push(iteratee(element, index, list));
+  });
   return newList;
 };
 
@@ -255,5 +236,14 @@ _.shuffle = function (list) {
   }
   return list;
 };
+
+_.invoke = function (list, methodName, args) {
+  if (typeof list !== 'object') return [];
+   args = [].slice.call(arguments, 2);
+  return _.map(list,  (value) => {   
+    return value[methodName].apply(value, args);
+  });
+};
+
 
 module.exports = _;

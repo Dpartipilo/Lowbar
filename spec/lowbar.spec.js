@@ -197,11 +197,6 @@ describe('#map', () => {
     _.map([0, 1, 2, 3, 4], function (num) { result.push(this[num] + num); }, context);
     expect(result).to.eql([1, 3, 5, 7, 9]);
   });
-  describe('works for nested arrays', () => {
-    it('iterates with all the elements of each nested array', () => {
-      expect(_.map([[1, 2, 3], [4, 5, 6]], (num) => num * 3)).to.eql([[3, 6, 9], [12, 15, 18]]);
-    });
-  });
 });
 
 describe('#contains', () => {
@@ -444,7 +439,7 @@ describe('#negate', () => {
   });
 });
 
-describe.only('#shuffle', () => {
+describe('#shuffle', () => {
   it('is a function', () => {
     expect(_.shuffle).to.be.a.function;
   });
@@ -488,5 +483,25 @@ describe.only('#shuffle', () => {
     let shuffledObj2 = _.shuffle(obj);
     expect(shuffledObj1 && shuffledObj2).to.be.an('array');
     expect(shuffledObj1).to.not.equal(shuffledObj2);
+  });
+});
+
+describe('#invoke', () => {
+  it('is a function', () => {
+    expect(_.invoke).to.be.a.function;
+  });
+  it('returns an empty array if invalid data type is given',  () => {
+    expect(_.invoke(6413, 'sort')).to.eql([]);
+    expect(_.invoke(false, 'sort')).to.eql([]);
+    expect(_.invoke('string', 'sort')).to.eql([]);
+  });
+  it('returns a sorted list of values when passed methodName sort',  () => {
+    expect(_.invoke([[5, 1, 7], [3, 2, 1]], 'sort')).to.eql([[1, 5, 7], [1, 2, 3]]);
+  });
+  it('returns an array of stringified object values when passed an object and methodName toString',  () => {
+    expect(_.invoke({ a: 123, b: 456, c: 789 }, 'toString')).to.eql(['123', '456', '789']);
+  });
+  it('forwards any other arguments to the methodName and call that method on each value in the list',  () => {
+    expect(_.invoke([[1, 2, 3, 4], [4,3,2,1]], 'join', '')).to.eql([ '1234', '4321' ]);
   });
 });
