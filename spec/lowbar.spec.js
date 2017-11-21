@@ -430,16 +430,63 @@ describe('#negate', () => {
     name: 'Superman',
     strength: 'Super',
     heroism: true
-};
+  };
   it('is a function', () => {
     expect(_.negate).to.be.a.function;
   });
   it('returns a new negated version of the predicate function', () => {
-    function isSuperStrong (character) {
+    function isSuperStrong(character) {
       return character.strength === 'Super';
-  }
-  let result = _.negate(isSuperStrong); 
+    }
+    let result = _.negate(isSuperStrong);
     expect(result(superman)).to.equal(false);
     expect(!result(superman)).to.equal(true);
+  });
+});
+
+describe.only('#shuffle', () => {
+  it('is a function', () => {
+    expect(_.shuffle).to.be.a.function;
+  });
+  it('returns an empty array when invalid data type is given', () => {
+    expect(_.shuffle(1234)).to.eql([]);
+    expect(_.shuffle(true)).to.eql([]);
+  });
+  it('the shuffled list and the original list should have the same length', () => {
+    let list = [1, 2, 3, 4, 5, 6];
+    expect(_.shuffle(list)).to.be.an('array');
+    expect(_.shuffle(list)).to.have.lengthOf(6);
+  });
+  it('shuffles the order of values in the list each time it is called', () => {
+    let list = [1, 2, 3, 4, 5, 6];
+    let shuffle1 = _.shuffle(list);
+    let shuffle2 = _.shuffle(list);
+    expect(shuffle1 && shuffle2).to.be.an('array');
+    expect(shuffle1).to.not.equal(shuffle2);
+  });
+  it('[strings]- returns an array of characters of the same length as the original string', () => {
+    let str = 'Testing shuffle!';
+    expect(_.shuffle(str)).to.be.an('array');
+    expect(_.shuffle(str)).to.have.lengthOf(16);
+  });
+  it('[strings]- shuffles the order of characters each time it is called', () => {
+    let str = 'Shuffle this!';
+    let shuffledStr1 = _.shuffle(str);
+    let shuffledStr2 = _.shuffle(str);
+    expect(shuffledStr1 && shuffledStr2).to.be.an('array');
+    expect(shuffledStr1).to.not.equal(shuffledStr2);
+  });
+  it('[objects]- returns an array of values, the same length as the original object', () => {
+    let obj = { a: 5, b: 'piano', c: 15, d: '25', e: 'coding' };
+    let shuffledObj1 = _.shuffle(obj);
+    let shuffledObj2 = _.shuffle(obj);
+    expect(shuffledObj1.length).to.equal(shuffledObj2.length);
+  });
+  it('[objects]- shuffles the order of values each time it is called', () => {
+    let obj = { a: 5, b: 'coding', c: 23, d: 55, e: 'banana' };
+    let shuffledObj1 = _.shuffle(obj);
+    let shuffledObj2 = _.shuffle(obj);
+    expect(shuffledObj1 && shuffledObj2).to.be.an('array');
+    expect(shuffledObj1).to.not.equal(shuffledObj2);
   });
 });
