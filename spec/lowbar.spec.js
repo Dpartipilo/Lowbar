@@ -292,7 +292,8 @@ describe('#every', () => {
   });
   it('binds the iteratee to the context if one is given', () => {
     const context = [2, 4, 6];
-    expect(_.every([0, 1, 2], function (element) { return this[element] % 2 === 0; }, context)).to.equal(true);
+    const iteratee = function (element) { return this[element] % 2 === 0; };
+    expect(_.every([0, 1, 2], iteratee, context)).to.equal(true);
   });
   describe('Works for strings', () => {
     it('returns true if all of the values in the string pass the predicate truth test.', () => {
@@ -490,18 +491,49 @@ describe('#invoke', () => {
   it('is a function', () => {
     expect(_.invoke).to.be.a.function;
   });
-  it('returns an empty array if invalid data type is given',  () => {
+  it('returns an empty array if invalid data type is given', () => {
     expect(_.invoke(6413, 'sort')).to.eql([]);
     expect(_.invoke(false, 'sort')).to.eql([]);
     expect(_.invoke('string', 'sort')).to.eql([]);
   });
-  it('returns a sorted list of values when passed methodName sort',  () => {
+  it('returns a sorted list of values when passed methodName sort', () => {
     expect(_.invoke([[5, 1, 7], [3, 2, 1]], 'sort')).to.eql([[1, 5, 7], [1, 2, 3]]);
   });
-  it('returns an array of stringified object values when passed an object and methodName toString',  () => {
+  it('returns an array of stringified object values when passed an object and methodName toString', () => {
     expect(_.invoke({ a: 123, b: 456, c: 789 }, 'toString')).to.eql(['123', '456', '789']);
   });
-  it('forwards any other arguments to the methodName and call that method on each value in the list',  () => {
-    expect(_.invoke([[1, 2, 3, 4], [4,3,2,1]], 'join', '')).to.eql([ '1234', '4321' ]);
+  it('forwards any other arguments to the methodName and call that method on each value in the list', () => {
+    expect(_.invoke([[1, 2, 3, 4], [4, 3, 2, 1]], 'join', '')).to.eql(['1234', '4321']);
+  });
+});
+
+describe('#sortBy', () => {
+  it('is a function', () => {
+    expect(_.sortBy).to.be.a.function;
+  });
+  it('returns an empty array if invalid data type is given', () => {
+    expect(_.sortBy(1234)).to.eql([]);
+    expect(_.sortBy(true)).to.eql([]);
+    expect(_.sortBy(undefined), (element) => element === undefined).to.eql([]);
+    expect(_.sortBy(1234), (num) => num * 3).to.eql([]);
+
+  });
+  it('returns an array of objects sorted by the string name of the property to sort by', () => {
+    const stooges = [{ name: 'moe', age: 40 }, { name: 'larry', age: 50 }, { name: 'curly', age: 60 }];
+    expect(_.sortBy(stooges, 'name')).to.eql([{ name: 'curly', age: 60 }, { name: 'larry', age: 50 }, { name: 'moe', age: 40 }]);
+    expect(_.sortBy(['World of Warcraft', 'Starcraft', 'Overwatch'], 'length')).to.eql(['Starcraft', 'Overwatch', 'World of Warcraft']);
+  });
+  it('returns a sorted copy of list, ranked in ascending order by the results of running each value through iteratee.', () => {
+    const iteratee = (num) => Math.sin(num);
+    expect(_.sortBy([1, 2, 3, 4, 5, 6], iteratee)).to.eql([5, 4, 6, 3, 1, 2]);
+  });
+  it('returns a sorted copy of a string ranked in order of the results of running each character through iteratee.', () => {
+    const iteratee = (char) => char.charCodeAt();
+    expect(_.sortBy('Diego', iteratee)).to.eql(['D', 'e', 'g', 'i', 'o']);
+  });
+  it('binds the iteratee to the context if one is given', () => {
+    const context = 5;
+    const iteratee = function (num) { return this / num; };
+    expect(_.sortBy([1, 2, 3, 4, 5, 6], iteratee, context)).to.eql([6, 5, 4, 3, 2, 1]);
   });
 });

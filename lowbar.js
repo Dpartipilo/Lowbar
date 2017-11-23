@@ -239,11 +239,30 @@ _.shuffle = function (list) {
 
 _.invoke = function (list, methodName, args) {
   if (typeof list !== 'object') return [];
-   args = [].slice.call(arguments, 2);
-  return _.map(list,  (value) => {   
+  args = [].slice.call(arguments, 2);
+  return _.map(list, (value) => {
     return value[methodName].apply(value, args);
   });
 };
 
+_.sortBy = function (list, iteratee, context) {
+  if (context) iteratee = iteratee.bind(context);
+  if (typeof list !== 'object' && typeof list !== 'string') return [];
+  let listCopy;
+  if (typeof iteratee === 'string') {
+    listCopy = [...list];
+    return listCopy.sort((a, b) => {
+      if (a[iteratee] < b[iteratee]) return -1;
+      if (a[iteratee] > b[iteratee]) return 1;
+      return 0;
+    });
+  }
+  Array.isArray(list) ? listCopy = [...list] : listCopy = list.split('');
+  return listCopy.sort((a, b) => {
+    if (iteratee(a) < iteratee(b)) return -1;
+    if (iteratee(a) > iteratee(b)) return 1;
+    return 0;
+  });
+};
 
 module.exports = _;
