@@ -265,4 +265,17 @@ _.sortBy = function (list, iteratee, context) {
   });
 };
 
+_.zip = function (arrays) {
+  if (!Array.isArray(arrays) && typeof arrays !== 'string') return [];
+  let result = [];
+  arrays = [].slice.apply(arguments);
+  for (let i = 0; i < arrays.length; i++) {
+    _.map(arrays[i], (element, index) => {
+      if (result[index]) result[index].push(element);
+      else result[index] = [element];
+    });
+  }
+  return result;
+};
+
 module.exports = _;

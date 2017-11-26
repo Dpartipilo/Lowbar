@@ -62,7 +62,7 @@ These are the core functions I will aim to get finished;
 18. negate
 19. shuffle
 20. invoke
-21. sortBy (NB the Underscore library uses the native JavaScript sort but feel free to use your sort algorithm!)
+21. sortBy
 22. zip
 23. sortedIndex
 24. flatten

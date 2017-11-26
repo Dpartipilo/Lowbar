@@ -516,7 +516,6 @@ describe('#sortBy', () => {
     expect(_.sortBy(true)).to.eql([]);
     expect(_.sortBy(undefined), (element) => element === undefined).to.eql([]);
     expect(_.sortBy(1234), (num) => num * 3).to.eql([]);
-
   });
   it('returns an array of objects sorted by the string name of the property to sort by', () => {
     const stooges = [{ name: 'moe', age: 40 }, { name: 'larry', age: 50 }, { name: 'curly', age: 60 }];
@@ -535,5 +534,22 @@ describe('#sortBy', () => {
     const context = 5;
     const iteratee = function (num) { return this / num; };
     expect(_.sortBy([1, 2, 3, 4, 5, 6], iteratee, context)).to.eql([6, 5, 4, 3, 2, 1]);
+  });
+});
+
+describe('#zip', () => {
+  it('is a function', () => {
+    expect(_.zip).to.be.a.function;
+  });
+  it('returns an empty array for invalid data types', () => {
+    expect(_.zip(123)).to.eql([]);
+    expect(_.zip(true)).to.eql([]);
+    expect(_.zip({})).to.eql([]);
+  });
+  it('merges together the values of each of the arrays with the values at the corresponding position.', () => {
+    expect(_.zip(['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false])).to.eql([['moe', 30, true], ['larry', 40, false], ['curly', 50, false]]);
+  });
+  it('merges together the values of each of the given strings with the values at the corresponding position', function () {
+    expect(_.zip('code', 'cool', 'done')).to.eql([['c', 'c', 'd'], ['o', 'o', 'o'], ['d', 'o', 'n'], ['e', 'l', 'e']]);
   });
 });
