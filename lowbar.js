@@ -278,4 +278,19 @@ _.zip = function (arrays) {
   return result;
 };
 
+_.sortedIndex = function (array, obj, iteratee, context) {
+  if (!Array.isArray(array) && typeof array !== 'string') return 0;
+  if (context) iteratee = iteratee.bind(iteratee);
+  iteratee = iteratee || _.identity;
+  let prop = iteratee;
+  iteratee = (typeof iteratee === 'string' || iteratee instanceof String) ? (elem) => elem[prop] : iteratee;
+  let value = iteratee(obj);
+  let low = 0, high = array.length - 1;
+  while (low < high) {
+    let mid = Math.floor((low + high) / 2);
+    if (iteratee(array[mid]) < value) low = mid + 1; else high = mid;
+  }
+  return low;
+};
+
 module.exports = _;

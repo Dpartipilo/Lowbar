@@ -553,3 +553,24 @@ describe('#zip', () => {
     expect(_.zip('code', 'cool', 'done')).to.eql([['c', 'c', 'd'], ['o', 'o', 'o'], ['d', 'o', 'n'], ['e', 'l', 'e']]);
   });
 });
+
+describe('#sortedIndex', () => {
+  it('is a function.', () => {
+    expect(_.sortedIndex).to.be.a.function;
+  });
+  it('returns 0 if invalid data type is given.', () => {
+    expect(_.sortedIndex(true, false)).to.equal(0);
+    expect(_.sortedIndex(123, 4)).to.equal(0);
+  });
+  it('determine the index at which the value should be inserted into the list in order to maintain the list\'s sorted order.', () => {
+    expect(_.sortedIndex([10, 20, 30, 40, 50], 35)).to.eql(3);
+    expect(_.sortedIndex(['D', 'i', 'e', 'g'], 'o')).to.equal(3);
+  });
+  it('returns the index at which the object should be inserted into the list to maintain the list\'s sorted order.', () => {
+    var turtles = [{ name: 'Moe', age: 40 }, { name: 'Curly', age: 60 }];
+    expect(_.sortedIndex(turtles, { name: 'Larry', age: 50 }, 'age')).to.equal(1);
+  });
+  it('returns the index at which the value should be inserted into the list when iteratee is given as the string name of the property to sort by.', () => {
+    expect(_.sortedIndex(['aero', 'javascript', 'coding', 'java'], 'cloud', 'length')).to.equal(1);
+  });
+});
