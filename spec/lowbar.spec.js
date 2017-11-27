@@ -574,3 +574,26 @@ describe('#sortedIndex', () => {
     expect(_.sortedIndex(['aero', 'javascript', 'coding', 'java'], 'cloud', 'length')).to.equal(1);
   });
 });
+
+describe('#flatten', () => {
+  it('is a function', () => {
+    expect(_.flatten).to.be.a.function;
+  });
+  it('returns an empty array for invalid data types.', () => {
+    expect(_.flatten(123)).to.eql([]);
+    expect(_.flatten({skill:'coding'})).to.eql([]);
+    expect(_.flatten(true)).to.eql([]);
+    
+  });
+  it('returns an splitted array with all the charaters of the string.', () => {
+    expect(_.flatten('Diego')).to.eql(['D','i','e','g','o']);
+    expect(_.flatten('true')).to.eql(['t','r','u','e']);
+  });
+  it('returns a single array with all the elements of the nested arrays.', () => {
+    expect(_.flatten([[1], [2], [3], [4]])).to.eql([1, 2, 3, 4]);
+    expect(_.flatten([[1], [2], [3], [[[4]]]])).to.eql([1, 2, 3, 4]);
+  });
+  it('if shallow is true the array will only be flattened a single level.', () => {
+    expect(_.flatten([['uno'], [['dos']], [3], [[4]]], true)).to.eql(['uno', ['dos'], 3, [4]]);
+  });
+});

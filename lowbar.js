@@ -293,4 +293,14 @@ _.sortedIndex = function (array, obj, iteratee, context) {
   return low;
 };
 
+_.flatten = function (array, shallow) {
+  if (!Array.isArray(array) && typeof array !== 'string') return [];
+  if (typeof array === 'string') return array.split('');
+
+  return _.reduce(array, (flattened, item) => {
+    if (Array.isArray(item) && (!shallow)) item = _.flatten(item);
+    return flattened.concat(item);
+  }, []);
+};
+
 module.exports = _;
