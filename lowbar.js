@@ -100,9 +100,7 @@ _.contains = function (input, value) {
   }
   if (Array.isArray(input)) {
     for (let i = 0; i < input.length; i++) {
-      if (input[i] === value) {
-        return true;
-      }
+      if (input[i] === value) return true;
     }
   }
   if (typeof input === 'object' && !Array.isArray(input)) {
@@ -300,6 +298,20 @@ _.flatten = function (array, shallow) {
   return _.reduce(array, (flattened, item) => {
     if (Array.isArray(item) && (!shallow)) item = _.flatten(item);
     return flattened.concat(item);
+  }, []);
+};
+
+_.intersection = function (arrays) {
+  arrays = [].slice.call(arguments);
+  if (!Array.isArray(arrays[0]) && typeof arrays[0] !== 'string') return [];
+  if (typeof arrays[0] === 'string') arrays[0] = arrays[0].split('');
+  return _.reduce(arrays[0], (result, item) => {
+    let isPresent = true;
+    _.each(arrays, (list) => {
+      if (!_.contains(list, item)) isPresent = false;
+    });
+    if (isPresent && !_.contains(result, item)) result.push(item);
+    return result;
   }, []);
 };
 

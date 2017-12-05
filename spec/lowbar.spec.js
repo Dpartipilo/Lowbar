@@ -341,7 +341,7 @@ describe('#some', () => {
 
 describe('#extend', () => {
   it('is a function', () => {
-    expect(_.extend()).to.be.a.function;
+    expect(_.extend).to.be.a('function');
   });
   it('returns destination if given invalid arguments', () => {
     expect(_.extend(1234)).to.equal(1234);
@@ -369,7 +369,7 @@ describe('#extend', () => {
 
 describe('#defaults', () => {
   it('is a function', () => {
-    expect(_.defaults()).to.be.a.function;
+    expect(_.defaults).to.be.a('function');
   });
   it('returns the object when invalid data type is given', () => {
     expect(_.defaults(1234)).to.eql(1234);
@@ -396,7 +396,7 @@ describe('#defaults', () => {
 
 describe('#once', () => {
   it('should be a function', () => {
-    expect(_.once).to.be.a.function;
+    expect(_.once).to.be.a('function');
   });
   it('creates a version of the function that can only be called one time.', () => {
     let spy = sinon.spy();
@@ -428,7 +428,7 @@ describe('#negate', () => {
     heroism: true
   };
   it('is a function', () => {
-    expect(_.negate).to.be.a.function;
+    expect(_.negate).to.be.a('function');
   });
   it('returns a new negated version of the predicate function', () => {
     function isSuperStrong(character) {
@@ -442,7 +442,7 @@ describe('#negate', () => {
 
 describe('#shuffle', () => {
   it('is a function', () => {
-    expect(_.shuffle).to.be.a.function;
+    expect(_.shuffle).to.be.a('function');
   });
   it('returns an empty array when invalid data type is given', () => {
     expect(_.shuffle(1234)).to.eql([]);
@@ -489,7 +489,7 @@ describe('#shuffle', () => {
 
 describe('#invoke', () => {
   it('is a function', () => {
-    expect(_.invoke).to.be.a.function;
+    expect(_.invoke).to.be.a('function');
   });
   it('returns an empty array if invalid data type is given', () => {
     expect(_.invoke(6413, 'sort')).to.eql([]);
@@ -509,7 +509,7 @@ describe('#invoke', () => {
 
 describe('#sortBy', () => {
   it('is a function', () => {
-    expect(_.sortBy).to.be.a.function;
+    expect(_.sortBy).to.be.a('function');
   });
   it('returns an empty array if invalid data type is given', () => {
     expect(_.sortBy(1234)).to.eql([]);
@@ -539,7 +539,7 @@ describe('#sortBy', () => {
 
 describe('#zip', () => {
   it('is a function', () => {
-    expect(_.zip).to.be.a.function;
+    expect(_.zip).to.be.a('function');
   });
   it('returns an empty array for invalid data types', () => {
     expect(_.zip(123)).to.eql([]);
@@ -556,7 +556,7 @@ describe('#zip', () => {
 
 describe('#sortedIndex', () => {
   it('is a function.', () => {
-    expect(_.sortedIndex).to.be.a.function;
+    expect(_.sortedIndex).to.be.a('function');
   });
   it('returns 0 if invalid data type is given.', () => {
     expect(_.sortedIndex(true, false)).to.equal(0);
@@ -577,7 +577,7 @@ describe('#sortedIndex', () => {
 
 describe('#flatten', () => {
   it('is a function', () => {
-    expect(_.flatten).to.be.a.function;
+    expect(_.flatten).to.be.a('function');
   });
   it('returns an empty array for invalid data types.', () => {
     expect(_.flatten(123)).to.eql([]);
@@ -595,5 +595,27 @@ describe('#flatten', () => {
   });
   it('if shallow is true the array will only be flattened a single level.', () => {
     expect(_.flatten([['uno'], [['dos']], [3], [[4]]], true)).to.eql(['uno', ['dos'], 3, [4]]);
+  });
+});
+
+describe('#intersection', () => {
+  it('is a function', () => {
+    expect(_.intersection).to.be.a('function');
+  });
+  it('returns an empty array for invalid data type', () => {
+    expect(_.intersection(123)).to.eql([]);
+    expect(_.intersection(true)).to.eql([]);
+    expect(_.intersection({name: 'me'}, {name: 'me'})).to.eql([]);
+  });
+  it('returns an array that contains every item shared between all the passed-in arrays.', () => {
+    expect(_.intersection([1, 2, 3], [101, 2, 1, 10], [2, 1])).to.eql([1, 2]);
+    expect(_.intersection(['don\'t' ,1,'stop', 'coding', true], ['don\'t', 2, 'stop', false, 'coding'], ['don\'t', 'stop', 'coding'])).to.eql(['don\'t', 'stop', 'coding']);
+  });
+  it('returns an array with all characters in common between each given string',  () => {
+    expect(_.intersection('coding', 'code', 'cone', 'correct')).to.eql(['c','o']);
+    expect(_.intersection('smart', 'fast', 'different')).to.eql(['t']);
+  });
+  it('returns an array with all items common to each array/object given when given a mix of items beginning with an array',  () => {
+    expect(_.intersection([1, 2, 3], [5, 2, 1, 4, 3], { a: 1, b: 55, c: 3 })).to.eql([1, 3]);
   });
 });
