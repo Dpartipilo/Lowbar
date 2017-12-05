@@ -581,13 +581,13 @@ describe('#flatten', () => {
   });
   it('returns an empty array for invalid data types.', () => {
     expect(_.flatten(123)).to.eql([]);
-    expect(_.flatten({skill:'coding'})).to.eql([]);
+    expect(_.flatten({ skill: 'coding' })).to.eql([]);
     expect(_.flatten(true)).to.eql([]);
-    
+
   });
   it('returns an splitted array with all the charaters of the string.', () => {
-    expect(_.flatten('Diego')).to.eql(['D','i','e','g','o']);
-    expect(_.flatten('true')).to.eql(['t','r','u','e']);
+    expect(_.flatten('Diego')).to.eql(['D', 'i', 'e', 'g', 'o']);
+    expect(_.flatten('true')).to.eql(['t', 'r', 'u', 'e']);
   });
   it('returns a single array with all the elements of the nested arrays.', () => {
     expect(_.flatten([[1], [2], [3], [4]])).to.eql([1, 2, 3, 4]);
@@ -605,17 +605,35 @@ describe('#intersection', () => {
   it('returns an empty array for invalid data type', () => {
     expect(_.intersection(123)).to.eql([]);
     expect(_.intersection(true)).to.eql([]);
-    expect(_.intersection({name: 'me'}, {name: 'me'})).to.eql([]);
+    expect(_.intersection({ name: 'me' }, { name: 'me' })).to.eql([]);
   });
   it('returns an array that contains every item shared between all the passed-in arrays.', () => {
     expect(_.intersection([1, 2, 3], [101, 2, 1, 10], [2, 1])).to.eql([1, 2]);
-    expect(_.intersection(['don\'t' ,1,'stop', 'coding', true], ['don\'t', 2, 'stop', false, 'coding'], ['don\'t', 'stop', 'coding'])).to.eql(['don\'t', 'stop', 'coding']);
+    expect(_.intersection(['don\'t', 1, 'stop', 'coding', true], ['don\'t', 2, 'stop', false, 'coding'], ['don\'t', 'stop', 'coding'])).to.eql(['don\'t', 'stop', 'coding']);
   });
-  it('returns an array with all characters in common between each given string',  () => {
-    expect(_.intersection('coding', 'code', 'cone', 'correct')).to.eql(['c','o']);
+  it('returns an array with all characters in common between each given string', () => {
+    expect(_.intersection('coding', 'code', 'cone', 'correct')).to.eql(['c', 'o']);
     expect(_.intersection('smart', 'fast', 'different')).to.eql(['t']);
   });
-  it('returns an array with all items common to each array/object given when given a mix of items beginning with an array',  () => {
+  it('returns an array with all items common to each array/object given when given a mix of items beginning with an array', () => {
     expect(_.intersection([1, 2, 3], [5, 2, 1, 4, 3], { a: 1, b: 55, c: 3 })).to.eql([1, 3]);
+  });
+});
+
+describe('#difference', () => {
+  it('is a function', () => {
+    expect(_.difference).to.be.a('function');
+  });
+  it('returns an empty array if invalid data type is given', () => {
+    expect(_.difference(true)).to.eql([]);
+    expect(_.difference(123)).to.eql([]);
+    expect(_.difference({})).to.eql([]);
+  });
+  it('returns the values from array that are not present in the other arrays.', () => {
+    expect(_.difference([1, 2, 3, 4, 5], [5, 2, 10])).to.eql([1, 3, 4]);
+    expect(_.difference([1, 2, 3, 4, 5], [1, 2], [3, 4])).to.eql([5]);
+  });
+  it('when a string is given returns an array with the splitted characters of the first argument.', () => {
+    expect(_.difference('Diego', 'coding', 'forever')).to.eql(['D','i','e','g','o']);
   });
 });

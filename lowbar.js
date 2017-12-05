@@ -315,4 +315,13 @@ _.intersection = function (arrays) {
   }, []);
 };
 
+_.difference = function (array, others) {
+  if (!Array.isArray(array) && typeof array !== 'string') return [];
+  if (typeof array === 'string') return array.split('');
+  others = _.flatten(others.slice.call(arguments, 1));
+  return _.filter(array, (value) => {
+    return !_.contains(others, value);
+  });
+};
+
 module.exports = _;
