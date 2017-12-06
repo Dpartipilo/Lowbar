@@ -324,4 +324,16 @@ _.difference = function (array, others) {
   });
 };
 
+_.memoize = function (func, hashFunc) {
+  _.has = (obj, key) => obj !== null && hasOwnProperty.call(obj, key);
+  let memoize = function (key) {
+    let cache = memoize.cache;
+    let address = '' + (hashFunc ? hashFunc.apply(this, arguments) : key);
+    if (!_.has(cache, address)) cache[address] = func.apply(this, arguments);
+    return cache[address];
+  };
+  memoize.cache = {};
+  return memoize;
+};
+
 module.exports = _;

@@ -634,6 +634,56 @@ describe('#difference', () => {
     expect(_.difference([1, 2, 3, 4, 5], [1, 2], [3, 4])).to.eql([5]);
   });
   it('when a string is given returns an array with the splitted characters of the first argument.', () => {
-    expect(_.difference('Diego', 'coding', 'forever')).to.eql(['D','i','e','g','o']);
+    expect(_.difference('Diego', 'coding', 'forever')).to.eql(['D', 'i', 'e', 'g', 'o']);
+  });
+});
+
+describe('#memoize', () => {
+  it('is a function', () => {
+    expect(_.memoize).to.be.a('function');
+  });
+  it('returns the same value as the original function', () => {
+    const ingAdder = (word) => word + 'ing';
+    const memoizeIng = _.memoize(ingAdder);
+    expect(memoizeIng('jump')).to.eql(ingAdder('jump'));
+    expect(memoizeIng('cod')).to.eql(ingAdder('cod'));
+  });
+  it('calls the given function once when called multiple times with the same first argument', () => {
+    const ingAdder = (word) => word + 'ing';
+    const spy = sinon.spy(ingAdder);
+    const memoizeIng = _.memoize(spy);
+    memoizeIng('eat');
+    memoizeIng('eat');
+    memoizeIng('eat');
+    expect(spy.callCount).to.equal(1);
+  });
+  it('calls the given function every time it is given a unique first argument', () => {
+    const double = (num) => num * 2;
+    const spy = sinon.spy(double);
+    const spyMemoize = _.memoize(spy);
+    spyMemoize(1);
+    spyMemoize(2);
+    spyMemoize(3);
+    expect(spy.callCount).to.equal(3);
+  });
+  it('have access to multiple arguments passed in to the given function', () => {
+    const add = (a, b) => a + b;
+    const spy = sinon.spy(add);
+    const spyMemoize = _.memoize(spy);
+    spyMemoize(2, 3);
+    expect(spy.calledWithExactly(2, 3)).to.equal(true);
+  });
+  it('uses the hashFunction given to generate keys for the cached results', () => {
+    const add =  (a, b) => a + b;
+    function dashSeparateArgs() {
+      const args = [];
+      for (let i = 0; i < arguments.length; i++) {
+        args.push(arguments[i]);
+      }
+      return args.join('-');
+    }
+    const memoizeAdd = _.memoize(add, dashSeparateArgs);
+    expect(memoizeAdd(4, 1)).to.equal(5);
+    expect(memoizeAdd(4, 2)).to.equal(6);
   });
 });
