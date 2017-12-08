@@ -674,7 +674,7 @@ describe('#memoize', () => {
     expect(spy.calledWithExactly(2, 3)).to.equal(true);
   });
   it('uses the hashFunction given to generate keys for the cached results', () => {
-    const add =  (a, b) => a + b;
+    const add = (a, b) => a + b;
     function dashSeparateArgs() {
       const args = [];
       for (let i = 0; i < arguments.length; i++) {
@@ -685,5 +685,33 @@ describe('#memoize', () => {
     const memoizeAdd = _.memoize(add, dashSeparateArgs);
     expect(memoizeAdd(4, 1)).to.equal(5);
     expect(memoizeAdd(4, 2)).to.equal(6);
+  });
+});
+
+describe('#delay', () => {
+  it('is a function', () => {
+    expect(_.delay).to.be.a('function');
+  });
+  it('invokes function after "wait" milliseconds.', () => {
+    let clock = sinon.useFakeTimers();
+    let delay = false;
+    let func = () => delay = true;
+
+    _.delay(func, 500);
+    expect(delay).to.be.false;
+    clock.tick(510);
+    expect(delay).to.be.true;
+    clock.restore();
+  });
+  it('forwards optional arguments on to the function when it is invoked.', () => {
+    let clock = sinon.useFakeTimers();
+    let result = 2;
+    const double = (num) => result = num * 2;
+
+    _.delay(double, 500, 2);
+    expect(result).to.equal(2);
+    clock.tick(510);
+    expect(result).to.equal(4);
+    clock.restore();
   });
 });

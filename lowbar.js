@@ -336,4 +336,13 @@ _.memoize = function (func, hashFunc) {
   return memoize;
 };
 
+_.delay = function (func, wait, args) {
+  wait = wait || 0;
+  args = [].slice.call(arguments, 2);
+  return setTimeout(function () {
+    return func.apply(null, args);
+  }, wait);
+};
+
+
 module.exports = _;
