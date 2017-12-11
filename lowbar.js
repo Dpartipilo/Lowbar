@@ -344,5 +344,14 @@ _.delay = function (func, wait, args) {
   }, wait);
 };
 
+_.where = (list, properties) => {
+  return _.filter(list, item => {
+    let isPresent = true;
+    for (let key in properties) {
+      if (item[key] !== properties[key]) isPresent = false;
+    }
+    return isPresent;
+  });
+};
 
 module.exports = _;

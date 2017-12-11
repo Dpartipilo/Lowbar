@@ -715,3 +715,31 @@ describe('#delay', () => {
     clock.restore();
   });
 });
+
+describe('#where', () => {
+  it('is a function', () => {
+    expect(_.where).to.be.a('function');
+  });
+  it('returns an empty array when invalid data type is given.', () => {
+    expect(_.where()).to.eql([]);
+    expect(_.where(5)).to.eql([]);
+    expect(_.where(true)).to.eql([]);
+  });
+  it('returns an array of all the values that contain all of the key-value pairs listed in properties.', () => {
+    let listOfGames = [
+      { title: 'Rock & Roll Racing', year: 1993, author: 'Silicon & Synapse' },
+      { title: 'Warcraft: Orcs & Humans', year: 1994, author: 'Blizzard' },
+      { title: 'Starcraft', year: 1998, author: 'Blizzard' },
+      { title: 'World of Warcraft', year: 2004, author: 'Blizzard' },
+      { title: 'Half-Life', year: 1998, author: 'Valve' }
+    ];
+
+    expect(_.where(listOfGames, { year: 1998 })).to.eql([
+      { title: 'Starcraft', year: 1998, author: 'Blizzard' },
+      { title: 'Half-Life', year: 1998, author: 'Valve' }
+    ]);
+    expect(_.where(listOfGames, { year: 1998, author: 'Blizzard' })).to.eql([
+      { title: 'Starcraft', year: 1998, author: 'Blizzard' }
+    ]);
+  });
+});
