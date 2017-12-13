@@ -354,4 +354,32 @@ _.where = (list, properties) => {
   });
 };
 
+_.throttle = function (func, wait, options) {
+  if (!options) options = { leading: true };
+  wait = wait || 0;
+  const start = Date.now();
+  let previous;
+  let funcCalls = 0;
+  let load = true;
+  const caller = function (...args) {
+    if (funcCalls === 0) {
+      previous = Date.now();
+      funcCalls++;
+      return options.leading === false ? _.delay(func, wait, ...args) : func(...args);
+    }
+    if (funcCalls > 0) {
+      let remaining = wait - (Date.now() - previous);
+      if ((options.leading === true || options.trailing === true) && load) {
+        load = false;
+        return _.delay(func, remaining, ...args);
+      }
+    }
+    if (Date.now() - start > wait) {
+      funcCalls = 0;
+      load = true;
+    }
+  };
+  return caller;
+};
+
 module.exports = _;

@@ -743,3 +743,63 @@ describe('#where', () => {
     ]);
   });
 });
+
+describe('#throttle', () => {
+  beforeEach(() => {
+    const double = (num) => num * 2;
+    this.clock = sinon.useFakeTimers();
+    this.spy = sinon.spy(double);
+  });
+  afterEach(() => {
+    this.clock.restore();
+  });
+  it('is a function.', () => {
+    expect(_.throttle).to.be.a('function');
+  });
+  it('returns a function.', () => {
+    expect(_.throttle()).to.be.a('function');
+    expect(_.throttle('code')).to.be.a('function');
+  });
+  it('returns a new function passing the arguments from the given function.', () => {
+    const double = (num) => num * 2;
+    const throttleDouble = _.throttle(double);
+    expect(throttleDouble(2)).to.equal(4);
+  });
+  it('will only call the original function at most once per every wait milliseconds.', () => {
+    const throttleSpy = _.throttle(this.spy, 200);
+    throttleSpy(2);
+    throttleSpy(2);
+    throttleSpy(2);
+    expect(this.spy.callCount).to.equal(1);
+    this.clock.tick(205);
+    expect(this.spy.callCount).to.equal(2);
+  });
+  it('calls the function again after the wait period when leading: true is given.', () => {
+    const throttleSpy = _.throttle(this.spy, 200, {leading: true});
+    throttleSpy(2);
+    throttleSpy(2);
+    this.clock.tick(150);
+    throttleSpy(2);
+    expect(this.spy.callCount).to.equal(1);
+    this.clock.tick(205);
+    expect(this.spy.callCount).to.equal(2);
+  });
+  it('calls the function only after the wait period when leading: false is given.', () => {
+    const throttleSpy = _.throttle(this.spy, 200, {leading: false});
+    throttleSpy(2);
+    throttleSpy(2);
+    throttleSpy(2);
+    expect(this.spy.callCount).to.equal(0);
+    this.clock.tick(205);
+    expect(this.spy.callCount).to.equal(1);
+  });
+  it('calls the function and doesn\'t call it again after the wait period when trailing: false is given.', () => {
+    const throttleSpy = _.throttle(this.spy, 200, {trailing: false});
+    throttleSpy(2);
+    throttleSpy(2);
+    throttleSpy(2);
+    expect(this.spy.callCount).to.equal(1);
+    this.clock.tick(205);
+    expect(this.spy.callCount).to.equal(1);
+  });
+});
