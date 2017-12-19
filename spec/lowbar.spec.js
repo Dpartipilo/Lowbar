@@ -775,7 +775,7 @@ describe('#throttle', () => {
     expect(this.spy.callCount).to.equal(2);
   });
   it('calls the function again after the wait period when leading: true is given.', () => {
-    const throttleSpy = _.throttle(this.spy, 200, {leading: true});
+    const throttleSpy = _.throttle(this.spy, 200, { leading: true });
     throttleSpy(2);
     throttleSpy(2);
     this.clock.tick(150);
@@ -785,7 +785,7 @@ describe('#throttle', () => {
     expect(this.spy.callCount).to.equal(2);
   });
   it('calls the function only after the wait period when leading: false is given.', () => {
-    const throttleSpy = _.throttle(this.spy, 200, {leading: false});
+    const throttleSpy = _.throttle(this.spy, 200, { leading: false });
     throttleSpy(2);
     throttleSpy(2);
     throttleSpy(2);
@@ -794,12 +794,36 @@ describe('#throttle', () => {
     expect(this.spy.callCount).to.equal(1);
   });
   it('calls the function and doesn\'t call it again after the wait period when trailing: false is given.', () => {
-    const throttleSpy = _.throttle(this.spy, 200, {trailing: false});
+    const throttleSpy = _.throttle(this.spy, 200, { trailing: false });
     throttleSpy(2);
     throttleSpy(2);
     throttleSpy(2);
     expect(this.spy.callCount).to.equal(1);
     this.clock.tick(205);
     expect(this.spy.callCount).to.equal(1);
+  });
+});
+
+describe('#partial', () => {
+  it('is a function', () => {
+    expect(_.partial).to.be.a('function');
+  });
+  it('returns a function', () => {
+    expect(_.partial()).to.be.a('function');
+  });
+  it('returns a new function passing the arguments from the given function if no partials are given.', () => {
+    const double = (a, b) => a * b;
+    const partialDouble = _.partial(double);
+    expect(partialDouble(2, 2)).to.equal(4);
+  });
+  it('returns a new function partially filled in.', () => {
+    const multiply = (a, b) => a * b;
+    const subtract = (a, b) => a - b;
+    const partialMultiply2 = _.partial(multiply, 2);
+    const partialSub = _.partial(subtract, 20, 10);
+    const partialMultiply4 = _.partial(multiply, _, 4);
+    expect(partialMultiply2(2)).to.equal(4);
+    expect(partialSub(12, 34)).to.equal(10);
+    expect(partialMultiply4(2)).to.equal(8);
   });
 });

@@ -382,4 +382,17 @@ _.throttle = function (func, wait, options) {
   return caller;
 };
 
+
+_.partial = function (func, ...args) {
+  const bound = (...boundArgs) => {
+    if (args.length === 0) return func(...boundArgs);
+    const newArgs = _.map(args, arg => {
+      if (arg === _ ) return boundArgs.shift();
+      return arg;
+    });
+    return func(...newArgs, ...boundArgs);
+  };
+  return bound;
+}; 
+
 module.exports = _;
