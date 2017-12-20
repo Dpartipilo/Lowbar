@@ -74,12 +74,6 @@ _.uniq = function (array) {
       uniqueArray.push(element);
     }
   });
-
-  // ***********WITHOUT _.each*************
-  // for (let i = 0; i < array.length; i++) {
-  //   if (!uniqueArray.includes(array[i]))
-  //     uniqueArray.push(array[i]);
-  // }
   return uniqueArray;
 };
 
@@ -112,7 +106,6 @@ _.contains = function (input, value) {
   return false;
 };
 
-
 _.pluck = function (list, propertyName) {
   if (!Array.isArray(list)) return undefined;
   let newArr = [];
@@ -122,13 +115,6 @@ _.pluck = function (list, propertyName) {
       if (propertyName === key) newArr.push(element[propertyName]);
     }
   });
-
-  // *************** WITHOUT MAP ****************
-  // for (let i = 0; i < list.length; i++) {
-  //   for (let key in list[i]) {
-  //     if (propertyName === key) { newArr.push(list[i][propertyName]); }
-  //   }
-  // }
   return newArr;
 };
 
@@ -382,17 +368,16 @@ _.throttle = function (func, wait, options) {
   return caller;
 };
 
-
 _.partial = function (func, ...args) {
   const bound = (...boundArgs) => {
     if (args.length === 0) return func(...boundArgs);
     const newArgs = _.map(args, arg => {
-      if (arg === _ ) return boundArgs.shift();
+      if (arg === _) return boundArgs.shift();
       return arg;
     });
     return func(...newArgs, ...boundArgs);
   };
   return bound;
-}; 
+};
 
 module.exports = _;
